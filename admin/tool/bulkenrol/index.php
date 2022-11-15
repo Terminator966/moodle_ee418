@@ -17,9 +17,7 @@
 /**
  * Bulk course registration script from a comma separated file.
  *
- * @package    tool_uploadcourse
- * @copyright  2011 Piers Harding
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
 
 require(__DIR__ . '/../../../config.php');
@@ -31,7 +29,7 @@ admin_externalpage_setup('tooluploadcourse');
 $importid         = optional_param('importid', '', PARAM_INT);
 $previewrows = optional_param('previewrows', 10, PARAM_INT);
 
-$returnurl = new moodle_url('/admin/tool/uploadcourse/index.php');
+$returnurl = new moodle_url('/admin/tool/bulkenrol/index.php');
 
 if (empty($importid)) {
     $mform1 = new tool_bulkenrol_step1_form();
@@ -42,19 +40,19 @@ if (empty($importid)) {
         $readcount = $cir->load_csv_content($content, $form1data->encoding, $form1data->delimiter_name);
         unset($content);
         if ($readcount === false) {
-            print_error('csvfileerror', 'tool_uploadcourse', $returnurl, $cir->get_error());
+            print_error('csvfileerror', 'tool_bulkenrol', $returnurl, $cir->get_error());
         } else if ($readcount == 0) {
             print_error('csvemptyfile', 'error', $returnurl, $cir->get_error());
         }
     } else {
         echo $OUTPUT->header();
-        echo $OUTPUT->heading_with_help(get_string('uploadcourses', 'tool_uploadcourse'), 'uploadcourses', 'tool_uploadcourse');
+        echo $OUTPUT->heading_with_help(get_string('bulkenrol', 'tool_bulkenrol'), 'bulkenrol', 'tool_bulkenrol');
         $mform1->display();
         echo $OUTPUT->footer();
         die();
     }
 } else {
-    $cir = new csv_import_reader($importid, 'uploadcourse');
+    $cir = new csv_import_reader($importid, 'bulkenrol');
 }
 
 // Data to set in the form.
@@ -94,11 +92,11 @@ if ($form2data = $mform2->is_cancelled()) {
 
     echo $OUTPUT->header();
     if (isset($form2data->showpreview)) {
-        echo $OUTPUT->heading(get_string('uploadcoursespreview', 'tool_uploadcourse'));
+        echo $OUTPUT->heading(get_string('bulkenrolpreview', 'tool_bulkenrol'));
         $processor->preview($previewrows, new tool_uploadcourse_tracker(tool_uploadcourse_tracker::OUTPUT_HTML));
         $mform2->display();
     } else {
-        echo $OUTPUT->heading(get_string('uploadcoursesresult', 'tool_uploadcourse'));
+        echo $OUTPUT->heading(get_string('bulkenrolresult', 'tool_bulkenrol'));
         $processor->execute(new tool_uploadcourse_tracker(tool_uploadcourse_tracker::OUTPUT_HTML));
         echo $OUTPUT->continue_button($returnurl);
     }
@@ -119,7 +117,7 @@ if ($form2data = $mform2->is_cancelled()) {
     }
     $processor = new tool_bulkenrol_processor($cir, $options, array());
     echo $OUTPUT->header();
-    echo $OUTPUT->heading(get_string('uploadcoursespreview', 'tool_uploadcourse'));
+    echo $OUTPUT->heading(get_string('uploadenrolpreview', 'tool_bulkenrol'));
     $processor->preview($previewrows, new tool_uploadcourse_tracker(tool_uploadcourse_tracker::OUTPUT_HTML));
     $mform2->display();
 }

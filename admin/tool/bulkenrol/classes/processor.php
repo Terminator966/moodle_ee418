@@ -17,9 +17,7 @@
 /**
  * File containing processor class.
  *
- * @package    tool_uploadcourse
- * @copyright  2013 Frédéric Massart
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -28,11 +26,9 @@ require_once($CFG->libdir . '/csvlib.class.php');
 /**
  * Processor class.
  *
- * @package    tool_uploadcourse
- * @copyright  2013 Frédéric Massart
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
-class tool_uploadcourse_processor {
+class tool_bulkenrol_processor {
 
     /**
      * Create courses that do not exist yet.

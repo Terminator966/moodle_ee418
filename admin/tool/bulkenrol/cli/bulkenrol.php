@@ -17,9 +17,7 @@
 /**
  * CLI Bulk course registration script from a comma separated file.
  *
- * @package    tool_uploadcourse
- * @copyright  2012 Piers Harding
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
 
 define('CLI_SCRIPT', true);

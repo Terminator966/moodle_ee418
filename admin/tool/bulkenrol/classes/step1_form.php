@@ -17,9 +17,7 @@
 /**
  * File containing the step 1 of the upload form.
  *
- * @package    tool_uploadcourse
- * @copyright  2013 Frédéric Massart
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -29,9 +27,7 @@ require_once($CFG->libdir.'/formslib.php');
 /**
  * Upload a file CVS file with course information.
  *
- * @package    tool_uploadcourse
- * @copyright  2011 Piers Harding
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
 class tool_bulkenrol_step1_form extends tool_bulkenrol_base_form {
 
@@ -44,12 +40,12 @@ class tool_bulkenrol_step1_form extends tool_bulkenrol_base_form {
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
 
-        $mform->addElement('filepicker', 'coursefile', get_string('coursefile', 'tool_uploadcourse'));
+        $mform->addElement('filepicker', 'coursefile', get_string('coursefile', 'tool_bulkenrol'));
         $mform->addRule('coursefile', null, 'required');
-        $mform->addHelpButton('coursefile', 'coursefile', 'tool_uploadcourse');
+        $mform->addHelpButton('coursefile', 'coursefile', 'tool_bulkenrol');
 
         $choices = csv_import_reader::get_delimiter_list();
-        $mform->addElement('select', 'delimiter_name', get_string('csvdelimiter', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'delimiter_name', get_string('csvdelimiter', 'tool_bulkenrol'), $choices);
         if (array_key_exists('cfg', $choices)) {
             $mform->setDefault('delimiter_name', 'cfg');
         } else if (get_string('listsep', 'langconfig') == ';') {
@@ -57,23 +53,23 @@ class tool_bulkenrol_step1_form extends tool_bulkenrol_base_form {
         } else {
             $mform->setDefault('delimiter_name', 'comma');
         }
-        $mform->addHelpButton('delimiter_name', 'csvdelimiter', 'tool_uploadcourse');
+        $mform->addHelpButton('delimiter_name', 'csvdelimiter', 'tool_bulkenrol');
 
         $choices = core_text::get_encodings();
-        $mform->addElement('select', 'encoding', get_string('encoding', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'encoding', get_string('encoding', 'tool_bulkenrol'), $choices);
         $mform->setDefault('encoding', 'UTF-8');
-        $mform->addHelpButton('encoding', 'encoding', 'tool_uploadcourse');
+        $mform->addHelpButton('encoding', 'encoding', 'tool_bulkenrol');
 
         $choices = array('10' => 10, '20' => 20, '100' => 100, '1000' => 1000, '100000' => 100000);
-        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'tool_bulkenrol'), $choices);
         $mform->setType('previewrows', PARAM_INT);
-        $mform->addHelpButton('previewrows', 'rowpreviewnum', 'tool_uploadcourse');
+        $mform->addHelpButton('previewrows', 'rowpreviewnum', 'tool_bulkenrol');
 
         $this->add_import_options();
 
         $mform->addElement('hidden', 'showpreview', 1);
         $mform->setType('showpreview', PARAM_INT);
 
-        $this->add_action_buttons(false, get_string('preview', 'tool_uploadcourse'));
+        $this->add_action_buttons(false, get_string('preview', 'tool_bulkenrol'));
     }
 }
