@@ -136,6 +136,7 @@ class tool_uploadcourse_processor {
         // Force int to make sure === comparison work as expected.
         $this->mode = (int) $options['mode'];
 
+
         $this->updatemode = self::UPDATE_NOTHING;
         if (isset($options['updatemode'])) {
             // Force int to make sure === comparison work as expected.

@@ -111,7 +111,7 @@ $modes = array(
     'update' => tool_uploadcourse_processor::MODE_UPDATE_ONLY
 );
 if (!isset($options['mode']) || !isset($modes[$options['mode']])) {
-    echo get_string('invalidmode', 'tool_uploadcourse')."\n";
+    echo get_string('invalidmode', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -127,7 +127,7 @@ $updatemodes = array(
 if (($processoroptions['mode'] === tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE ||
         $processoroptions['mode'] === tool_uploadcourse_processor::MODE_UPDATE_ONLY)
         && (!isset($options['updatemode']) || !isset($updatemodes[$options['updatemode']]))) {
-    echo get_string('invalideupdatemode', 'tool_uploadcourse')."\n";
+    echo get_string('invalideupdatemode', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -138,7 +138,7 @@ if (!empty($options['file'])) {
     $options['file'] = realpath($options['file']);
 }
 if (!file_exists($options['file'])) {
-    echo get_string('invalidcsvfile', 'tool_uploadcourse')."\n";
+    echo get_string('invalidcsvfile', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -146,7 +146,7 @@ if (!file_exists($options['file'])) {
 // Encoding.
 $encodings = core_text::get_encodings();
 if (!isset($encodings[$options['encoding']])) {
-    echo get_string('invalidencoding', 'tool_uploadcourse')."\n";
+    echo get_string('invalidencoding', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -177,7 +177,7 @@ if ($options['restorefile']) {
     $options['restorefile'] = realpath($options['restorefile']);
 }
 if ($options['restorefile'] && !file_exists($options['restorefile'])) {
-    echo get_string('invalidrestorefile', 'tool_uploadcourse')."\n";
+    echo get_string('invalidrestorefile', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -193,7 +193,7 @@ $cir = new csv_import_reader($importid, 'uploadcourse');
 $readcount = $cir->load_csv_content($content, $options['encoding'], $options['delimiter']);
 unset($content);
 if ($readcount === false) {
-    throw new \moodle_exception('csvfileerror', 'tool_uploadcourse', '', $cir->get_error());
+    throw new \moodle_exception('csvfileerror', 'tool_bulkenrollment', '', $cir->get_error());
 } else if ($readcount == 0) {
     throw new \moodle_exception('csvemptyfile', 'error', '', $cir->get_error());
 }

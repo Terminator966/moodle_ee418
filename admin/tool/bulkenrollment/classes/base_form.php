@@ -51,48 +51,48 @@ class tool_uploadcourse_base_form extends moodleform {
         $mform = $this->_form;
 
         // Upload settings and file.
-        $mform->addElement('header', 'importoptionshdr', get_string('importoptions', 'tool_uploadcourse'));
+        $mform->addElement('header', 'importoptionshdr', get_string('importoptions', 'tool_bulkenrollment'));
         $mform->setExpanded('importoptionshdr', true);
 
         $choices = array(
-            tool_uploadcourse_processor::MODE_CREATE_NEW => get_string('createnew', 'tool_uploadcourse'),
-            tool_uploadcourse_processor::MODE_CREATE_ALL => get_string('createall', 'tool_uploadcourse'),
-            tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE => get_string('createorupdate', 'tool_uploadcourse'),
-            tool_uploadcourse_processor::MODE_UPDATE_ONLY => get_string('updateonly', 'tool_uploadcourse')
+            tool_uploadcourse_processor::MODE_CREATE_NEW => get_string('createnew', 'tool_bulkenrollment'),
+            tool_uploadcourse_processor::MODE_CREATE_ALL => get_string('createall', 'tool_bulkenrollment'),
+            tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE => get_string('createorupdate', 'tool_bulkenrollment'),
+            tool_uploadcourse_processor::MODE_UPDATE_ONLY => get_string('updateonly', 'tool_bulkenrollment')
         );
-        $mform->addElement('select', 'options[mode]', get_string('mode', 'tool_uploadcourse'), $choices);
-        $mform->addHelpButton('options[mode]', 'mode', 'tool_uploadcourse');
+        $mform->addElement('select', 'options[mode]', get_string('mode', 'tool_bulkenrollment'), $choices);
+        $mform->addHelpButton('options[mode]', 'mode', 'tool_bulkenrollment');
 
         $choices = array(
-            tool_uploadcourse_processor::UPDATE_NOTHING => get_string('nochanges', 'tool_uploadcourse'),
-            tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY => get_string('updatewithdataonly', 'tool_uploadcourse'),
+            tool_uploadcourse_processor::UPDATE_NOTHING => get_string('nochanges', 'tool_bulkenrollment'),
+            tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY => get_string('updatewithdataonly', 'tool_bulkenrollment'),
             tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS =>
-                get_string('updatewithdataordefaults', 'tool_uploadcourse'),
-            tool_uploadcourse_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS => get_string('updatemissing', 'tool_uploadcourse')
+                get_string('updatewithdataordefaults', 'tool_bulkenrollment'),
+            tool_uploadcourse_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS => get_string('updatemissing', 'tool_bulkenrollment')
         );
-        $mform->addElement('select', 'options[updatemode]', get_string('updatemode', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'options[updatemode]', get_string('updatemode', 'tool_bulkenrollment'), $choices);
         $mform->setDefault('options[updatemode]', tool_uploadcourse_processor::UPDATE_NOTHING);
         $mform->hideIf('options[updatemode]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_NEW);
         $mform->hideIf('options[updatemode]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_ALL);
-        $mform->addHelpButton('options[updatemode]', 'updatemode', 'tool_uploadcourse');
+        $mform->addHelpButton('options[updatemode]', 'updatemode', 'tool_bulkenrollment');
 
-        $mform->addElement('selectyesno', 'options[allowdeletes]', get_string('allowdeletes', 'tool_uploadcourse'));
+        $mform->addElement('selectyesno', 'options[allowdeletes]', get_string('allowdeletes', 'tool_bulkenrollment'));
         $mform->setDefault('options[allowdeletes]', 0);
         $mform->hideIf('options[allowdeletes]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_NEW);
         $mform->hideIf('options[allowdeletes]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_ALL);
-        $mform->addHelpButton('options[allowdeletes]', 'allowdeletes', 'tool_uploadcourse');
+        $mform->addHelpButton('options[allowdeletes]', 'allowdeletes', 'tool_bulkenrollment');
 
-        $mform->addElement('selectyesno', 'options[allowrenames]', get_string('allowrenames', 'tool_uploadcourse'));
+        $mform->addElement('selectyesno', 'options[allowrenames]', get_string('allowrenames', 'tool_bulkenrollment'));
         $mform->setDefault('options[allowrenames]', 0);
         $mform->hideIf('options[allowrenames]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_NEW);
         $mform->hideIf('options[allowrenames]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_ALL);
-        $mform->addHelpButton('options[allowrenames]', 'allowrenames', 'tool_uploadcourse');
+        $mform->addHelpButton('options[allowrenames]', 'allowrenames', 'tool_bulkenrollment');
 
-        $mform->addElement('selectyesno', 'options[allowresets]', get_string('allowresets', 'tool_uploadcourse'));
+        $mform->addElement('selectyesno', 'options[allowresets]', get_string('allowresets', 'tool_bulkenrollment'));
         $mform->setDefault('options[allowresets]', 0);
         $mform->hideIf('options[allowresets]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_NEW);
         $mform->hideIf('options[allowresets]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_ALL);
-        $mform->addHelpButton('options[allowresets]', 'allowresets', 'tool_uploadcourse');
+        $mform->addHelpButton('options[allowresets]', 'allowresets', 'tool_bulkenrollment');
     }
 
 }

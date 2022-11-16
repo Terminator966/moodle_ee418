@@ -15,7 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'tool_bulkenrol'.
+ * Strings for component 'tool_bulkenrollment'.
+ *
+ * @package    tool_uploadcourse
+ * @copyright  2011 Piers Harding
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['allowdeletes'] = 'Allow deletes';
@@ -52,20 +56,20 @@ $string['courserenamingnotallowed'] = 'Course renaming is not allowed';
 $string['coursereset'] = 'Course reset';
 $string['courseresetnotallowed'] = 'Course reset now allowed';
 $string['courserestored'] = 'Course restored';
-$string['coursestotal'] = 'Courses total: {$a}';
-$string['coursescreated'] = 'Courses created: {$a}';
-$string['coursesupdated'] = 'Courses updated: {$a}';
-$string['coursesdeleted'] = 'Courses deleted: {$a}';
-$string['courseserrors'] = 'Courses errors: {$a}';
-$string['courseshortnameincremented'] = 'Course shortname incremented {$a->from} -> {$a->to}';
-$string['courseshortnamegenerated'] = 'Course shortname generated: {$a}';
+$string['studentstotal'] = 'students total: {$a}';
+$string['studentscreated'] = 'students created: {$a}';
+$string['studentsupdated'] = 'students updated: {$a}';
+$string['studentsdeleted'] = 'students deleted: {$a}';
+$string['studentserrors'] = 'students errors: {$a}';
+$string['studentshortnameincremented'] = 'Course shortname incremented {$a->from} -> {$a->to}';
+$string['studentshortnamegenerated'] = 'Course shortname generated: {$a}';
 $string['coursetemplatename'] = 'Restore from this course after upload';
-$string['coursetemplatename_help'] = 'Enter an existing course shortname to use as a template for the creation of all courses.';
+$string['coursetemplatename_help'] = 'Enter an existing course shortname to use as a template for the creation of all students.';
 $string['coursetorestorefromdoesnotexist'] = 'The course to restore from does not exist';
 $string['courseupdated'] = 'Course updated';
 $string['createall'] = 'Create all, increment shortname if needed';
-$string['createnew'] = 'Create new courses only, skip existing ones';
-$string['createorupdate'] = 'Create new courses, or update existing ones';
+$string['createnew'] = 'Create new students only, skip existing ones';
+$string['createorupdate'] = 'Create new students, or update existing ones';
 $string['csvdelimiter'] = 'CSV separator';
 $string['csvdelimiter_help'] = 'The character separating the series of data in each record.';
 $string['csvfileerror'] = 'There is something wrong with the format of the CSV file. Please check the number of headings and columns match, and that the separator and file encoding are correct. {$a}';
@@ -100,7 +104,7 @@ $string['invalidshortnametoolong'] = 'The shortname field is limited to {$a} cha
 $string['missingmandatoryfields'] = 'Missing value for mandatory fields: {$a}';
 $string['missingshortnamenotemplate'] = 'Missing shortname and shortname template not set';
 $string['mode'] = 'Upload mode';
-$string['mode_help'] = 'This allows you to specify if courses can be created and/or updated.';
+$string['mode_help'] = 'This allows you to specify if students can be created and/or updated.';
 $string['nochanges'] = 'No changes';
 $string['pluginname'] = 'Course upload';
 $string['preview'] = 'Preview';
@@ -114,22 +118,22 @@ $string['rowpreviewnum_help'] = 'Number of rows from the CSV file that will be p
 $string['shortnametemplate'] = 'Template to generate a shortname';
 $string['shortnametemplate_help'] = 'The short name of the course is displayed in the navigation. You may use template syntax here (%f = fullname, %i = idnumber), or enter an initial value that is incremented.';
 $string['templatefile'] = 'Restore from this file after upload';
-$string['templatefile_help'] = 'Select a file to use as a template for the creation of all courses.';
+$string['templatefile_help'] = 'Select a file to use as a template for the creation of all students.';
 $string['unknownimportmode'] = 'Unknown import mode';
 $string['updatemissing'] = 'Fill in missing items from CSV data and defaults';
 $string['updatemode'] = 'Update mode';
-$string['updatemode_help'] = 'If you allow courses to be updated, you also have to tell the tool what to update the courses with.';
+$string['updatemode_help'] = 'If you allow students to be updated, you also have to tell the tool what to update the students with.';
 $string['updatemodedoessettonothing'] = 'Update mode does not allow anything to be updated';
-$string['updateonly'] = 'Only update existing courses';
+$string['updateonly'] = 'Only update existing students';
 $string['updatewithdataordefaults'] = 'Update with CSV data and defaults';
 $string['updatewithdataonly'] = 'Update with CSV data only';
-$string['bulkenrol'] = 'Bulk Student Enrollment (TEST)';
-$string['bulkenrol_help'] = 'Courses may be uploaded via text file. The format of the file should be as follows:
+$string['bulkenrollment'] = 'Bulk Enrollment Feature';
+$string['bulkenrollment_help'] = 'students may be uploaded via text file. The format of the file should be as follows:
 
 * Each line of the file contains one record
 * Each record is a series of data separated by the selected separator
 * The first record contains a list of fieldnames defining the format of the rest of the file
 * Required fieldnames are shortname, fullname, and category';
-$string['uploadenrolpreview'] = 'Enrollment preview';
-$string['uploadenrolresult'] = 'Enrollment results';
-$string['privacy:metadata'] = 'The Bulk Student upload plugin does not store any personal data.';
+$string['bulkenrollmentpreview'] = 'Bulk Enrollment preview';
+$string['bulkenrollmentresult'] = 'Bulk Enrollment results';
+$string['privacy:metadata'] = 'The Bulk Enrollment plugin does not store any personal data.';

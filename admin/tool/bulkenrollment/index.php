@@ -26,12 +26,12 @@ require(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/csvlib.class.php');
 
-admin_externalpage_setup('tooluploadcourse');
+admin_externalpage_setup('toolbulkenrollment');
 
 $importid         = optional_param('importid', '', PARAM_INT);
 $previewrows = optional_param('previewrows', 10, PARAM_INT);
 
-$returnurl = new moodle_url('/admin/tool/uploadcourse/index.php');
+$returnurl = new moodle_url('/admin/tool/bulkenrollment/index.php');
 
 if (empty($importid)) {
     $mform1 = new tool_uploadcourse_step1_form();

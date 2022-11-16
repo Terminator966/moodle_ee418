@@ -44,12 +44,12 @@ class tool_uploadcourse_step1_form extends tool_uploadcourse_base_form {
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
 
-        $mform->addElement('filepicker', 'coursefile', get_string('coursefile', 'tool_uploadcourse'));
+        $mform->addElement('filepicker', 'coursefile', get_string('coursefile', 'tool_bulkenrollment'));
         $mform->addRule('coursefile', null, 'required');
-        $mform->addHelpButton('coursefile', 'coursefile', 'tool_uploadcourse');
+        $mform->addHelpButton('coursefile', 'coursefile', 'tool_bulkenrollment');
 
         $choices = csv_import_reader::get_delimiter_list();
-        $mform->addElement('select', 'delimiter_name', get_string('csvdelimiter', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'delimiter_name', get_string('csvdelimiter', 'tool_bulkenrollment'), $choices);
         if (array_key_exists('cfg', $choices)) {
             $mform->setDefault('delimiter_name', 'cfg');
         } else if (get_string('listsep', 'langconfig') == ';') {
@@ -57,23 +57,23 @@ class tool_uploadcourse_step1_form extends tool_uploadcourse_base_form {
         } else {
             $mform->setDefault('delimiter_name', 'comma');
         }
-        $mform->addHelpButton('delimiter_name', 'csvdelimiter', 'tool_uploadcourse');
+        $mform->addHelpButton('delimiter_name', 'csvdelimiter', 'tool_bulkenrollment');
 
         $choices = core_text::get_encodings();
-        $mform->addElement('select', 'encoding', get_string('encoding', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'encoding', get_string('encoding', 'tool_bulkenrollment'), $choices);
         $mform->setDefault('encoding', 'UTF-8');
-        $mform->addHelpButton('encoding', 'encoding', 'tool_uploadcourse');
+        $mform->addHelpButton('encoding', 'encoding', 'tool_bulkenrollment');
 
         $choices = array('10' => 10, '20' => 20, '100' => 100, '1000' => 1000, '100000' => 100000);
-        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'tool_bulkenrollment'), $choices);
         $mform->setType('previewrows', PARAM_INT);
-        $mform->addHelpButton('previewrows', 'rowpreviewnum', 'tool_uploadcourse');
+        $mform->addHelpButton('previewrows', 'rowpreviewnum', 'tool_bulkenrollment');
 
         $this->add_import_options();
 
         $mform->addElement('hidden', 'showpreview', 1);
         $mform->setType('showpreview', PARAM_INT);
 
-        $this->add_action_buttons(false, get_string('preview', 'tool_uploadcourse'));
+        $this->add_action_buttons(false, get_string('preview', 'tool_bulkenrollment'));
     }
 }

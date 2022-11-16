@@ -50,13 +50,13 @@ class tool_uploadcourse_step2_form extends tool_uploadcourse_base_form {
         $this->add_import_options();
 
         // Course options.
-        $mform->addElement('header', 'courseoptionshdr', get_string('courseprocess', 'tool_uploadcourse'));
+        $mform->addElement('header', 'courseoptionshdr', get_string('courseprocess', 'tool_bulkenrollment'));
         $mform->setExpanded('courseoptionshdr', true);
 
-        $mform->addElement('text', 'options[shortnametemplate]', get_string('shortnametemplate', 'tool_uploadcourse'),
+        $mform->addElement('text', 'options[shortnametemplate]', get_string('shortnametemplate', 'tool_bulkenrollment'),
             'maxlength="100" size="20"');
         $mform->setType('options[shortnametemplate]', PARAM_RAW);
-        $mform->addHelpButton('options[shortnametemplate]', 'shortnametemplate', 'tool_uploadcourse');
+        $mform->addHelpButton('options[shortnametemplate]', 'shortnametemplate', 'tool_bulkenrollment');
         $mform->hideIf('options[shortnametemplate]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE);
         $mform->hideIf('options[shortnametemplate]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_UPDATE_ONLY);
 
@@ -64,22 +64,22 @@ class tool_uploadcourse_step2_form extends tool_uploadcourse_base_form {
         $contextid = $this->_customdata['contextid'];
         $mform->addElement('hidden', 'contextid', $contextid);
         $mform->setType('contextid', PARAM_INT);
-        $mform->addElement('filepicker', 'restorefile', get_string('templatefile', 'tool_uploadcourse'));
-        $mform->addHelpButton('restorefile', 'templatefile', 'tool_uploadcourse');
+        $mform->addElement('filepicker', 'restorefile', get_string('templatefile', 'tool_bulkenrollment'));
+        $mform->addHelpButton('restorefile', 'templatefile', 'tool_bulkenrollment');
 
-        $mform->addElement('text', 'options[templatecourse]', get_string('coursetemplatename', 'tool_uploadcourse'));
+        $mform->addElement('text', 'options[templatecourse]', get_string('coursetemplatename', 'tool_bulkenrollment'));
         $mform->setType('options[templatecourse]', PARAM_TEXT);
-        $mform->addHelpButton('options[templatecourse]', 'coursetemplatename', 'tool_uploadcourse');
+        $mform->addHelpButton('options[templatecourse]', 'coursetemplatename', 'tool_bulkenrollment');
 
-        $mform->addElement('selectyesno', 'options[reset]', get_string('reset', 'tool_uploadcourse'));
+        $mform->addElement('selectyesno', 'options[reset]', get_string('reset', 'tool_bulkenrollment'));
         $mform->setDefault('options[reset]', 0);
         $mform->hideIf('options[reset]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_NEW);
         $mform->hideIf('options[reset]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_ALL);
         $mform->disabledIf('options[reset]', 'options[allowresets]', 'eq', 0);
-        $mform->addHelpButton('options[reset]', 'reset', 'tool_uploadcourse');
+        $mform->addHelpButton('options[reset]', 'reset', 'tool_bulkenrollment');
 
         // Default values.
-        $mform->addElement('header', 'defaultheader', get_string('defaultvalues', 'tool_uploadcourse'));
+        $mform->addElement('header', 'defaultheader', get_string('defaultvalues', 'tool_bulkenrollment'));
         $mform->setExpanded('defaultheader', true);
 
         $displaylist = core_course_category::make_categories_list('moodle/course:create');
@@ -194,7 +194,7 @@ class tool_uploadcourse_step2_form extends tool_uploadcourse_base_form {
 
         // Add custom fields to the form.
         $handler = \core_course\customfield\course_handler::create();
-        $handler->instance_form_definition($mform, 0, 'defaultvaluescustomfieldcategory', 'tool_uploadcourse');
+        $handler->instance_form_definition($mform, 0, 'defaultvaluescustomfieldcategory', 'tool_bulkenrollment');
 
         // Hidden fields.
         $mform->addElement('hidden', 'importid');
@@ -203,7 +203,7 @@ class tool_uploadcourse_step2_form extends tool_uploadcourse_base_form {
         $mform->addElement('hidden', 'previewrows');
         $mform->setType('previewrows', PARAM_INT);
 
-        $this->add_action_buttons(true, get_string('uploadcourses', 'tool_uploadcourse'));
+        $this->add_action_buttons(true, get_string('bulkenrollment', 'tool_bulkenrollment'));
 
         // Prepare custom fields data.
         $data = (object) $data;
@@ -222,7 +222,7 @@ class tool_uploadcourse_step2_form extends tool_uploadcourse_base_form {
     public function add_action_buttons($cancel = true, $submitlabel = null) {
         $mform =& $this->_form;
         $buttonarray = array();
-        $buttonarray[] = &$mform->createElement('submit', 'showpreview', get_string('preview', 'tool_uploadcourse'));
+        $buttonarray[] = &$mform->createElement('submit', 'showpreview', get_string('preview', 'tool_bulkenrollment'));
         $buttonarray[] = &$mform->createElement('submit', 'submitbutton', $submitlabel);
         $buttonarray[] = &$mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);

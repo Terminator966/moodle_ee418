@@ -24,7 +24,7 @@ require(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/csvlib.class.php');
 
-admin_externalpage_setup('tooluploadcourse');
+admin_externalpage_setup('toolbulkenrol');
 
 $importid         = optional_param('importid', '', PARAM_INT);
 $previewrows = optional_param('previewrows', 10, PARAM_INT);
