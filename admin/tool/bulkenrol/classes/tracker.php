@@ -17,9 +17,7 @@
 /**
  * Output tracker.
  *
- * @package    tool_uploadcourse
- * @copyright  2013 Frédéric Massart
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -28,11 +26,9 @@ require_once($CFG->libdir . '/weblib.php');
 /**
  * Class output tracker.
  *
- * @package    tool_uploadcourse
- * @copyright  2013 Frédéric Massart
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_bulkenrol
  */
-class tool_uploadcourse_tracker {
+class tool_uploadstudents_tracker {
 
     /**
      * Constant to output nothing.
@@ -52,7 +48,7 @@ class tool_uploadcourse_tracker {
     /**
      * @var array columns to display.
      */
-    protected $columns = array('line', 'result', 'id', 'shortname', 'fullname', 'idnumber', 'status');
+    protected $columns = array('line', 'result', 'id', 'user', 'course', 'role', 'status');
 
     /**
      * @var int row number.
@@ -112,11 +108,11 @@ class tool_uploadcourse_tracker {
         }
 
         $message = array(
-            get_string('coursestotal', 'tool_uploadcourse', $total),
-            get_string('coursescreated', 'tool_uploadcourse', $created),
-            get_string('coursesupdated', 'tool_uploadcourse', $updated),
-            get_string('coursesdeleted', 'tool_uploadcourse', $deleted),
-            get_string('courseserrors', 'tool_uploadcourse', $errors)
+            get_string('coursestotal', 'tool_bulkenrol', $total),
+            get_string('coursescreated', 'tool_bulkenrol', $created),
+            get_string('coursesupdated', 'tool_bulkenrol', $updated),
+            get_string('coursesdeleted', 'tool_bulkenrol', $deleted),
+            get_string('courseserrors', 'tool_bulkenrol', $errors)
         );
 
         if ($this->outputmode == self::OUTPUT_PLAIN) {
@@ -151,10 +147,9 @@ class tool_uploadcourse_tracker {
             $message = array(
                 $line,
                 $outcome ? 'OK' : 'NOK',
-                isset($data['id']) ? $data['id'] : '',
-                isset($data['shortname']) ? $data['shortname'] : '',
-                isset($data['fullname']) ? $data['fullname'] : '',
-                isset($data['idnumber']) ? $data['idnumber'] : ''
+                isset($data['user']) ? $data['user'] : '',
+                isset($data['course']) ? $data['course'] : '',
+                isset($data['role']) ? $data['role'] : ''
             );
             $this->buffer->output(implode("\t", $message));
             if (!empty($status)) {
@@ -176,10 +171,9 @@ class tool_uploadcourse_tracker {
             echo html_writer::start_tag('tr', array('class' => 'r' . $this->rownb % 2));
             echo html_writer::tag('td', $line, array('class' => 'c' . $ci++));
             echo html_writer::tag('td', $outcome, array('class' => 'c' . $ci++));
-            echo html_writer::tag('td', isset($data['id']) ? $data['id'] : '', array('class' => 'c' . $ci++));
-            echo html_writer::tag('td', isset($data['shortname']) ? $data['shortname'] : '', array('class' => 'c' . $ci++));
-            echo html_writer::tag('td', isset($data['fullname']) ? $data['fullname'] : '', array('class' => 'c' . $ci++));
-            echo html_writer::tag('td', isset($data['idnumber']) ? $data['idnumber'] : '', array('class' => 'c' . $ci++));
+            echo html_writer::tag('td', isset($data['user']) ? $data['user'] : '', array('class' => 'c' . $ci++));
+            echo html_writer::tag('td', isset($data['course']) ? $data['course'] : '', array('class' => 'c' . $ci++));
+            echo html_writer::tag('td', isset($data['role']) ? $data['role'] : '', array('class' => 'c' . $ci++));
             echo html_writer::tag('td', $status, array('class' => 'c' . $ci++));
             echo html_writer::end_tag('tr');
         }
@@ -203,15 +197,15 @@ class tool_uploadcourse_tracker {
         } else if ($this->outputmode == self::OUTPUT_HTML) {
             $ci = 0;
             echo html_writer::start_tag('table', array('class' => 'generaltable boxaligncenter flexible-wrap',
-                'summary' => get_string('uploadcoursesresult', 'tool_uploadcourse')));
+                'summary' => get_string('uploadcoursesresult', 'tool_bulkenrol')));
             echo html_writer::start_tag('tr', array('class' => 'heading r' . $this->rownb));
-            echo html_writer::tag('th', get_string('csvline', 'tool_uploadcourse'),
+            echo html_writer::tag('th', get_string('csvline', 'tool_bulkenrol'),
                 array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('result', 'tool_uploadcourse'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('id', 'tool_uploadcourse'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('shortname'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('fullname'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('idnumber'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('result', 'tool_bulkenrol'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('id', 'tool_bulkenrol'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('user'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('course'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('role'), array('class' => 'c' . $ci++, 'scope' => 'col'));
             echo html_writer::tag('th', get_string('status'), array('class' => 'c' . $ci++, 'scope' => 'col'));
             echo html_writer::end_tag('tr');
         }

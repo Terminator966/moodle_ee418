@@ -125,7 +125,7 @@ $updatemodes = array(
 if (($processoroptions['mode'] === tool_bulkenrol_processor::MODE_CREATE_OR_UPDATE ||
         $processoroptions['mode'] === tool_bulkenrol_processor::MODE_UPDATE_ONLY)
         && (!isset($options['updatemode']) || !isset($updatemodes[$options['updatemode']]))) {
-    echo get_string('invalideupdatemode', 'tool_uploadcourse')."\n";
+    echo get_string('invalideupdatemode', 'tool_bulkenrol')."\n";
     echo $help;
     die();
 }
@@ -136,7 +136,7 @@ if (!empty($options['file'])) {
     $options['file'] = realpath($options['file']);
 }
 if (!file_exists($options['file'])) {
-    echo get_string('invalidcsvfile', 'tool_uploadcourse')."\n";
+    echo get_string('invalidcsvfile', 'tool_bulkenrol')."\n";
     echo $help;
     die();
 }
@@ -144,7 +144,7 @@ if (!file_exists($options['file'])) {
 // Encoding.
 $encodings = core_text::get_encodings();
 if (!isset($encodings[$options['encoding']])) {
-    echo get_string('invalidencoding', 'tool_uploadcourse')."\n";
+    echo get_string('invalidencoding', 'tool_bulkenrol')."\n";
     echo $help;
     die();
 }
@@ -175,7 +175,7 @@ if ($options['restorefile']) {
     $options['restorefile'] = realpath($options['restorefile']);
 }
 if ($options['restorefile'] && !file_exists($options['restorefile'])) {
-    echo get_string('invalidrestorefile', 'tool_uploadcourse')."\n";
+    echo get_string('invalidrestorefile', 'tool_bulkenrol')."\n";
     echo $help;
     die();
 }
@@ -191,9 +191,9 @@ $cir = new csv_import_reader($importid, 'uploadcourse');
 $readcount = $cir->load_csv_content($content, $options['encoding'], $options['delimiter']);
 unset($content);
 if ($readcount === false) {
-    print_error('csvfileerror', 'tool_uploadcourse', '', $cir->get_error());
+    print_error('csvfileerror', 'tool_bulkenrol', '', $cir->get_error());
 } else if ($readcount == 0) {
     print_error('csvemptyfile', 'error', '', $cir->get_error());
 }
 $processor = new tool_bulkenrol_processor($cir, $processoroptions, $defaults);
-$processor->execute(new tool_uploadcourse_tracker(tool_uploadcourse_tracker::OUTPUT_PLAIN));
+$processor->execute(new tool_uploadstudents_tracker(tool_uploadstudents_tracker::OUTPUT_PLAIN));

@@ -184,7 +184,7 @@ class tool_uploadcourse_processor {
         $this->processstarted = true;
 
         if (empty($tracker)) {
-            $tracker = new tool_uploadcourse_tracker(tool_uploadcourse_tracker::NO_OUTPUT);
+            $tracker = new tool_uploadstudents_tracker(tool_uploadstudents_tracker::NO_OUTPUT);
         }
         $tracker->start();
 
@@ -334,7 +334,7 @@ class tool_uploadcourse_processor {
         $this->processstarted = true;
 
         if (empty($tracker)) {
-            $tracker = new tool_uploadcourse_tracker(tool_uploadcourse_tracker::NO_OUTPUT);
+            $tracker = new tool_uploadstudents_tracker(tool_uploadstudents_tracker::NO_OUTPUT);
         }
         $tracker->start();
 

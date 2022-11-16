@@ -198,4 +198,4 @@ if ($readcount === false) {
     print_error('csvemptyfile', 'error', '', $cir->get_error());
 }
 $processor = new tool_bulkenrol_processor($cir, $processoroptions, $defaults);
-$processor->execute(new tool_uploadcourse_tracker(tool_uploadcourse_tracker::OUTPUT_PLAIN));
+$processor->execute(new tool_uploadstudents_tracker(tool_uploadstudents_tracker::OUTPUT_PLAIN));
