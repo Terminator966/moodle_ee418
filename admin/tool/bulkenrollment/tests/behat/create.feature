@@ -1,4 +1,4 @@
-@tool @tool_uploadcourse @_file_upload
+@tool @tool_bulkenrollment @_file_upload
 Feature: An admin can create courses using a CSV file
   In order to create courses using a CSV file
   As an admin
@@ -13,7 +13,7 @@ Feature: An admin can create courses using a CSV file
 
   @javascript
   Scenario: Creation of unexisting courses
-    Given I upload "admin/tool/uploadcourse/tests/fixtures/courses.csv" file to "File" filemanager
+    Given I upload "admin/tool/bulkenrollment/tests/fixtures/courses.csv" file to "File" filemanager
     And I click on "Preview" "button"
     When I click on "Upload courses" "button"
     Then I should see "The course exists and update is not allowed"
@@ -27,7 +27,7 @@ Feature: An admin can create courses using a CSV file
 
   @javascript
   Scenario: Creation of existing courses
-    Given I upload "admin/tool/uploadcourse/tests/fixtures/courses.csv" file to "File" filemanager
+    Given I upload "admin/tool/bulkenrollment/tests/fixtures/courses.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Create all, increment shortname if needed"
     And I click on "Preview" "button"
     When I click on "Upload courses" "button"
@@ -55,7 +55,7 @@ Feature: An admin can create courses using a CSV file
       | Field 3 | Other    | select   | select    | {"options":"a\nb\nc"} |
       | Field 4 | Other    | text     | text      |                       |
       | Field 5 | Other    | textarea | textarea  |                       |
-    When I upload "admin/tool/uploadcourse/tests/fixtures/courses_custom_fields.csv" file to "File" filemanager
+    When I upload "admin/tool/bulkenrollment/tests/fixtures/courses_custom_fields.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Create new courses only, skip existing ones"
     And I click on "Preview" "button"
     And I click on "Upload courses" "button"
@@ -81,7 +81,7 @@ Feature: An admin can create courses using a CSV file
       | Field 3 | Other    | select   | select    | {"options":"a\nb\nc","defaultvalue":"b"}            |
       | Field 4 | Other    | text     | text      | {"defaultvalue":"Hello"}                            |
       | Field 5 | Other    | textarea | textarea  | {"defaultvalue":"Some text","defaultvalueformat":1} |
-    When I upload "admin/tool/uploadcourse/tests/fixtures/courses.csv" file to "File" filemanager
+    When I upload "admin/tool/bulkenrollment/tests/fixtures/courses.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Create all, increment shortname if needed"
     And I click on "Preview" "button"
     And I expand all fieldsets
@@ -117,7 +117,7 @@ Feature: An admin can create courses using a CSV file
       | contextlevel80 | 1 |
     And I click on "Create this role" "button"
     And I navigate to "Courses > Upload courses" in site administration
-    And I upload "admin/tool/uploadcourse/tests/fixtures/enrolment_role.csv" file to "File" filemanager
+    And I upload "admin/tool/bulkenrollment/tests/fixtures/enrolment_role.csv" file to "File" filemanager
     And I click on "Preview" "button"
     And I should see "Invalid role names: notexist"
     And I should see "Role notallowed not allowed in this context."

@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace tool_uploadcourse;
+namespace tool_bulkenrollment;
 
-use tool_uploadcourse_processor;
+use tool_bulkenrollment_processor;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -26,7 +26,7 @@ require_once($CFG->libdir . '/csvlib.class.php');
 /**
  * Processor test case.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -42,15 +42,15 @@ class processor_test extends \advanced_testcase {
             "c2,Course 2,Course 2 summary",
         );
         $content = implode("\n", $content);
-        $iid = \csv_import_reader::get_new_iid('uploadcourse');
-        $cir = new \csv_import_reader($iid, 'uploadcourse');
+        $iid = \csv_import_reader::get_new_iid('bulkenrollment');
+        $cir = new \csv_import_reader($iid, 'bulkenrollment');
         $cir->load_csv_content($content, 'utf-8', 'comma');
         $cir->init();
 
-        $options = array('mode' => tool_uploadcourse_processor::MODE_CREATE_ALL);
+        $options = array('mode' => tool_bulkenrollment_processor::MODE_CREATE_ALL);
         $defaults = array('category' => '1');
 
-        $p = new tool_uploadcourse_processor($cir, $options, $defaults);
+        $p = new tool_bulkenrollment_processor($cir, $options, $defaults);
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'c1')));
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'c2')));
         $p->execute();
@@ -71,15 +71,15 @@ class processor_test extends \advanced_testcase {
             "c2,Course 2,Course 2 summary",
         );
         $content = implode("\n", $content);
-        $iid = \csv_import_reader::get_new_iid('uploadcourse');
-        $cir = new \csv_import_reader($iid, 'uploadcourse');
+        $iid = \csv_import_reader::get_new_iid('bulkenrollment');
+        $cir = new \csv_import_reader($iid, 'bulkenrollment');
         $cir->load_csv_content($content, 'utf-8', 'comma');
         $cir->init();
 
-        $options = array('mode' => tool_uploadcourse_processor::MODE_CREATE_NEW, 'templatecourse' => $c1->shortname);
+        $options = array('mode' => tool_bulkenrollment_processor::MODE_CREATE_NEW, 'templatecourse' => $c1->shortname);
         $defaults = array('category' => '1');
 
-        $p = new tool_uploadcourse_processor($cir, $options, $defaults);
+        $p = new tool_bulkenrollment_processor($cir, $options, $defaults);
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'c2')));
         $p->execute();
         $c2 = $DB->get_record('course', array('shortname' => 'c2'));
@@ -104,19 +104,19 @@ class processor_test extends \advanced_testcase {
             "c1,Course 1,Course 1 summary",
         );
         $content = implode("\n", $content);
-        $iid = \csv_import_reader::get_new_iid('uploadcourse');
-        $cir = new \csv_import_reader($iid, 'uploadcourse');
+        $iid = \csv_import_reader::get_new_iid('bulkenrollment');
+        $cir = new \csv_import_reader($iid, 'bulkenrollment');
         $cir->load_csv_content($content, 'utf-8', 'comma');
         $cir->init();
 
         $options = array(
-            'mode' => tool_uploadcourse_processor::MODE_CREATE_NEW,
+            'mode' => tool_bulkenrollment_processor::MODE_CREATE_NEW,
             'restorefile' => __DIR__ . '/fixtures/backup.mbz',
             'templatecourse' => 'DoesNotExist'  // Restorefile takes priority.
         );
         $defaults = array('category' => '1');
 
-        $p = new tool_uploadcourse_processor($cir, $options, $defaults);
+        $p = new tool_bulkenrollment_processor($cir, $options, $defaults);
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'c1')));
         $p->execute();
         $c1 = $DB->get_record('course', array('shortname' => 'c1'));
@@ -140,15 +140,15 @@ class processor_test extends \advanced_testcase {
             ",Course 1,C1 Summary,ID123",
         );
         $content = implode("\n", $content);
-        $iid = \csv_import_reader::get_new_iid('uploadcourse');
-        $cir = new \csv_import_reader($iid, 'uploadcourse');
+        $iid = \csv_import_reader::get_new_iid('bulkenrollment');
+        $cir = new \csv_import_reader($iid, 'bulkenrollment');
         $cir->load_csv_content($content, 'utf-8', 'comma');
         $cir->init();
 
-        $options = array('mode' => tool_uploadcourse_processor::MODE_CREATE_NEW, 'shortnametemplate' => '%i: %f');
+        $options = array('mode' => tool_bulkenrollment_processor::MODE_CREATE_NEW, 'shortnametemplate' => '%i: %f');
         $defaults = array('category' => '1');
 
-        $p = new tool_uploadcourse_processor($cir, $options, $defaults);
+        $p = new tool_bulkenrollment_processor($cir, $options, $defaults);
         $this->assertFalse($DB->record_exists('course', array('idnumber' => 'ID123')));
         $p->execute();
         $this->assertTrue($DB->record_exists('course', array('idnumber' => 'ID123')));
@@ -161,14 +161,14 @@ class processor_test extends \advanced_testcase {
 
         $content = array();
         $content = implode("\n", $content);
-        $iid = \csv_import_reader::get_new_iid('uploadcourse');
-        $cir = new \csv_import_reader($iid, 'uploadcourse');
+        $iid = \csv_import_reader::get_new_iid('bulkenrollment');
+        $cir = new \csv_import_reader($iid, 'bulkenrollment');
         $cir->load_csv_content($content, 'utf-8', 'comma');
         $cir->init();
 
-        $options = array('mode' => tool_uploadcourse_processor::MODE_CREATE_NEW);
+        $options = array('mode' => tool_bulkenrollment_processor::MODE_CREATE_NEW);
         $this->expectException(\moodle_exception::class);
-        $p = new tool_uploadcourse_processor($cir, $options, array());
+        $p = new tool_bulkenrollment_processor($cir, $options, array());
     }
 
     public function test_not_enough_columns() {
@@ -179,14 +179,14 @@ class processor_test extends \advanced_testcase {
             "c1",
         );
         $content = implode("\n", $content);
-        $iid = \csv_import_reader::get_new_iid('uploadcourse');
-        $cir = new \csv_import_reader($iid, 'uploadcourse');
+        $iid = \csv_import_reader::get_new_iid('bulkenrollment');
+        $cir = new \csv_import_reader($iid, 'bulkenrollment');
         $cir->load_csv_content($content, 'utf-8', 'comma');
         $cir->init();
 
-        $options = array('mode' => tool_uploadcourse_processor::MODE_CREATE_NEW);
+        $options = array('mode' => tool_bulkenrollment_processor::MODE_CREATE_NEW);
         $this->expectException(\moodle_exception::class);
-        $p = new tool_uploadcourse_processor($cir, $options, array());
+        $p = new tool_bulkenrollment_processor($cir, $options, array());
     }
 
     public function test_preview() {
@@ -199,15 +199,15 @@ class processor_test extends \advanced_testcase {
             "c2,Course 2,Course 2 summary",
         );
         $content = implode("\n", $content);
-        $iid = \csv_import_reader::get_new_iid('uploadcourse');
-        $cir = new \csv_import_reader($iid, 'uploadcourse');
+        $iid = \csv_import_reader::get_new_iid('bulkenrollment');
+        $cir = new \csv_import_reader($iid, 'bulkenrollment');
         $cir->load_csv_content($content, 'utf-8', 'comma');
         $cir->init();
 
-        $options = array('mode' => tool_uploadcourse_processor::MODE_CREATE_ALL);
+        $options = array('mode' => tool_bulkenrollment_processor::MODE_CREATE_ALL);
         $defaults = array('category' => '1');
 
-        $p = new tool_uploadcourse_processor($cir, $options, $defaults);
+        $p = new tool_bulkenrollment_processor($cir, $options, $defaults);
         // Nothing special to expect here, just make sure no exceptions are thrown.
         $p->preview();
     }

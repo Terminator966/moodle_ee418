@@ -17,7 +17,7 @@
 /**
  * Cache definitions.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

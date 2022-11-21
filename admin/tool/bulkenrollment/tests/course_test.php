@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace tool_uploadcourse;
+namespace tool_bulkenrollment;
 
-use tool_uploadcourse_processor;
-use tool_uploadcourse_course;
+use tool_bulkenrollment_processor;
+use tool_bulkenrollment_course;
 
 /**
  * Course test case.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
  */
@@ -30,20 +30,20 @@ class course_test extends \advanced_testcase {
 
     public function test_proceed_without_prepare() {
         $this->resetAfterTest(true);
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array();
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->expectException(\coding_exception::class);
         $co->proceed();
     }
 
     public function test_proceed_when_prepare_failed() {
         $this->resetAfterTest(true);
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array();
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->expectException(\moodle_exception::class);
         $co->proceed();
@@ -51,10 +51,10 @@ class course_test extends \advanced_testcase {
 
     public function test_proceed_when_already_started() {
         $this->resetAfterTest(true);
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('shortname' => 'test', 'fullname' => 'New course', 'summary' => 'New', 'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->expectException('coding_exception');
@@ -63,10 +63,10 @@ class course_test extends \advanced_testcase {
 
     public function test_invalid_shortname() {
         $this->resetAfterTest(true);
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('shortname' => '<invalid>', 'fullname' => 'New course', 'summary' => 'New', 'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('invalidshortname', $co->get_errors());
     }
@@ -74,10 +74,10 @@ class course_test extends \advanced_testcase {
     public function test_invalid_shortname_too_long() {
         $this->resetAfterTest();
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'category' => 1,
             'fullname' => 'New course',
             'shortname' => str_repeat('X', 2000),
@@ -90,10 +90,10 @@ class course_test extends \advanced_testcase {
     public function test_invalid_fullname_too_long() {
         $this->resetAfterTest();
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'category' => 1,
             'fullname' => str_repeat('X', 2000),
         ]);
@@ -104,10 +104,10 @@ class course_test extends \advanced_testcase {
 
     public function test_invalid_visibility() {
         $this->resetAfterTest(true);
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('shortname' => 'test', 'fullname' => 'New course', 'summary' => 'New', 'category' => 1, 'visible' => 2);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('invalidvisibilitymode', $co->get_errors());
     }
@@ -121,10 +121,10 @@ class course_test extends \advanced_testcase {
 
         set_config('downloadcoursecontentallowed', 0);
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'category' => 1,
             'fullname' => 'Testing',
             'shortname' => 'T101',
@@ -157,10 +157,10 @@ class course_test extends \advanced_testcase {
         role_assign($roleid, $user->id, $categorycontext);
         role_change_permission($roleid, $categorycontext, 'moodle/course:configuredownloadcontent', CAP_PROHIBIT);
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'category' => $category->id,
             'fullname' => 'Testing',
             'shortname' => 'T101',
@@ -180,10 +180,10 @@ class course_test extends \advanced_testcase {
 
         set_config('downloadcoursecontentallowed', 1);
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'category' => 1,
             'fullname' => 'Testing',
             'shortname' => 'T101',
@@ -202,12 +202,12 @@ class course_test extends \advanced_testcase {
         $c1 = $this->getDataGenerator()->create_course(array('shortname' => 'c1', 'summary' => 'Yay!'));
         $this->assertTrue($DB->record_exists('course', array('shortname' => 'c1')));
 
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
         // Try to add a new course.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
         $data = array('shortname' => 'newcourse', 'fullname' => 'New course', 'summary' => 'New', 'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'newcourse')));
         $co->proceed();
@@ -216,27 +216,27 @@ class course_test extends \advanced_testcase {
 
         // Try to add a new course, that already exists.
         $coursecount = $DB->count_records('course', array());
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
         $data = array('shortname' => 'c1', 'fullname' => 'C1FN', 'summary' => 'C1', 'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('courseexistsanduploadnotallowed', $co->get_errors());
         $this->assertEquals($coursecount, $DB->count_records('course', array()));
         $this->assertNotEquals('C1', $DB->get_field_select('course', 'summary', 'shortname = :s', array('s' => 'c1')));
 
         // Try to add new with shortname incrementation.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_ALL;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_ALL;
         $data = array('shortname' => 'c1', 'fullname' => 'C1FN', 'summary' => 'C1', 'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertTrue($DB->record_exists('course', array('shortname' => 'c2')));
 
         // Add a new course with non-default course format option.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
         $data = array('shortname' => 'c3', 'fullname' => 'C3', 'summary' => 'New c3', 'category' => 1,
             'format' => 'weeks', 'coursedisplay' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'c3'), '*', MUST_EXIST);
@@ -246,13 +246,13 @@ class course_test extends \advanced_testcase {
     public function test_create_with_sections() {
         global $DB;
         $this->resetAfterTest(true);
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $defaultnumsections = get_config('moodlecourse', 'numsections');
 
         // Add new course, make sure default number of sections is created.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
         $data = array('shortname' => 'newcourse1', 'fullname' => 'New course1', 'format' => 'topics', 'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $courseid = $DB->get_field('course', 'id', array('shortname' => 'newcourse1'));
@@ -261,10 +261,10 @@ class course_test extends \advanced_testcase {
             $DB->count_records('course_sections', ['course' => $courseid]));
 
         // Add new course specifying number of sections.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
         $data = array('shortname' => 'newcourse2', 'fullname' => 'New course2', 'format' => 'topics', 'category' => 1,
             'numsections' => 15);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $courseid = $DB->get_field('course', 'id', array('shortname' => 'newcourse2'));
@@ -283,13 +283,13 @@ class course_test extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('course', array('shortname' => $c1->shortname)));
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'DoesNotExist')));
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
 
         // Try delete when option not available.
         $importoptions = array('candelete' => false);
         $data = array('shortname' => $c1->shortname, 'delete' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('coursedeletionnotallowed', $co->get_errors());
         $this->assertTrue($DB->record_exists('course', array('shortname' => $c1->shortname)));
@@ -297,7 +297,7 @@ class course_test extends \advanced_testcase {
         // Try delete when not requested.
         $importoptions = array('candelete' => true);
         $data = array('shortname' => $c1->shortname, 'delete' => 0);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertTrue($DB->record_exists('course', array('shortname' => $c1->shortname)));
@@ -305,7 +305,7 @@ class course_test extends \advanced_testcase {
         // Try delete when requested.
         $importoptions = array('candelete' => true);
         $data = array('shortname' => $c1->shortname, 'delete' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertFalse($DB->record_exists('course', array('shortname' => $c1->shortname)));
@@ -313,7 +313,7 @@ class course_test extends \advanced_testcase {
 
         // Try deleting non-existing record, this should not fail.
         $data = array('shortname' => 'DoesNotExist', 'delete' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotdeletecoursenotexist', $co->get_errors());
     }
@@ -325,70 +325,70 @@ class course_test extends \advanced_testcase {
         $c1 = $this->getDataGenerator()->create_course(array('shortname' => 'c1'));
 
         // Try to update with existing shortnames, not allowing creation, and updating nothing.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('shortname' => 'c1', 'fullname' => 'New fullname');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('updatemodedoessettonothing', $co->get_errors());
 
         // Try to update with non-existing shortnames.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'DoesNotExist', 'fullname' => 'New fullname');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('coursedoesnotexistandcreatenotallowed', $co->get_errors());
 
         // Try a proper update.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'c1', 'fullname' => 'New fullname');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertEquals('New fullname', $DB->get_field_select('course', 'fullname', 'shortname = :s', array('s' => 'c1')));
 
         // Try a proper update with defaults.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
         $data = array('shortname' => 'c1', 'fullname' => 'Another fullname');
         $defaults = array('fullname' => 'Not this one', 'summary' => 'Awesome summary');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, $defaults);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, $defaults);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertEquals('Another fullname', $DB->get_field_select('course', 'fullname', 'shortname = :s', array('s' => 'c1')));
         $this->assertEquals('Awesome summary', $DB->get_field_select('course', 'summary', 'shortname = :s', array('s' => 'c1')));
 
         // Try a proper update missing only.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS;
         $DB->set_field('course', 'summary', '', array('shortname' => 'c1'));
         $this->assertEquals('', $DB->get_field_select('course', 'summary', 'shortname = :s', array('s' => 'c1')));
         $data = array('shortname' => 'c1', 'summary' => 'Fill in summary');
         $defaults = array('summary' => 'Do not use this summary');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, $defaults);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, $defaults);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertEquals('Fill in summary', $DB->get_field_select('course', 'summary', 'shortname = :s', array('s' => 'c1')));
 
         // Try a proper update missing only using defaults.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS;
         $DB->set_field('course', 'summary', '', array('shortname' => 'c1'));
         $this->assertEquals('', $DB->get_field_select('course', 'summary', 'shortname = :s', array('s' => 'c1')));
         $data = array('shortname' => 'c1');
         $defaults = array('summary' => 'Use this summary');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, $defaults);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, $defaults);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertEquals('Use this summary', $DB->get_field_select('course', 'summary', 'shortname = :s', array('s' => 'c1')));
 
         // Update course format option.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'c1', 'coursedisplay' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'c1'), '*', MUST_EXIST);
@@ -404,8 +404,8 @@ class course_test extends \advanced_testcase {
         set_config('downloadcoursecontentallowed', 1);
 
         // Create.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array(
             'shortname' => 'c1',
             'fullname' => 'Fullname',
@@ -439,12 +439,12 @@ class course_test extends \advanced_testcase {
 
         // There should be a start date if there is a end date.
         $data['enddate'] = '7 June 1990';
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('nostartdatenoenddate', $co->get_errors());
 
         $data['startdate'] = '8 June 1990';
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('enddatebeforestartdate', $co->get_errors());
 
@@ -452,7 +452,7 @@ class course_test extends \advanced_testcase {
         $data['enddate'] = '18 June 1990';
 
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'c1')));
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertTrue($DB->record_exists('course', array('shortname' => 'c1')));
@@ -509,8 +509,8 @@ class course_test extends \advanced_testcase {
 
         // Update existing course.
         $cat = $this->getDataGenerator()->create_category();
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array(
             'shortname' => 'c1',
             'fullname' => 'Fullname 2',
@@ -546,19 +546,19 @@ class course_test extends \advanced_testcase {
 
         $data['enddate'] = '31 June 1984';
         // Previous start and end dates are 8 and 18 June 1990.
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('enddatebeforestartdate', $co->get_errors());
 
         $data['startdate'] = '19 June 1990';
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('enddatebeforestartdate', $co->get_errors());
 
         // They are correct now.
         $data['startdate'] = '11 June 1984';
 
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'c1'));
@@ -619,8 +619,8 @@ class course_test extends \advanced_testcase {
         set_config('downloadcoursecontentallowed', 1);
 
         // Create.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array(
             'shortname' => 'c1',
         );
@@ -647,7 +647,7 @@ class course_test extends \advanced_testcase {
         );
 
         $this->assertFalse($DB->record_exists('course', array('shortname' => 'c1')));
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, $defaultdata);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, $defaultdata);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertTrue($DB->record_exists('course', array('shortname' => 'c1')));
@@ -676,8 +676,8 @@ class course_test extends \advanced_testcase {
 
         // Update.
         $cat = $this->getDataGenerator()->create_category();
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
         $data = array(
             'shortname' => 'c1',
         );
@@ -704,7 +704,7 @@ class course_test extends \advanced_testcase {
         );
 
         $this->assertTrue($DB->record_exists('course', array('shortname' => 'c1')));
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, $defaultdata);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, $defaultdata);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertTrue($DB->record_exists('course', array('shortname' => 'c1')));
@@ -740,68 +740,68 @@ class course_test extends \advanced_testcase {
         $c2 = $this->getDataGenerator()->create_course(array('shortname' => 'c2'));
 
         // Cannot rename when creating.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'c1', 'rename' => 'newshortname');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('courseexistsanduploadnotallowed', $co->get_errors());
 
         // Cannot rename when creating.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_ALL;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_ALL;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'c1', 'rename' => 'newshortname', 'category' => 1, 'summary' => 'S', 'fullname' => 'F');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('canonlyrenameinupdatemode', $co->get_errors());
 
         // Error when not allowed to rename the course.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => false);
         $data = array('shortname' => 'c1', 'rename' => 'newshortname');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('courserenamingnotallowed', $co->get_errors());
 
         // Can rename when updating.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'c1', 'rename' => 'newshortname');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertEquals('newshortname', $DB->get_field_select('course', 'shortname', 'id = :id', array('id' => $c1->id)));
 
         // Can rename when updating.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'newshortname', 'rename' => 'newshortname2');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertEquals('newshortname2', $DB->get_field_select('course', 'shortname', 'id = :id', array('id' => $c1->id)));
 
         // Error when course does not exist.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'DoesNotExist', 'rename' => 'c1', 'category' => 1, 'summary' => 'S', 'fullname' => 'F');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotrenamecoursenotexist', $co->get_errors());
 
         // Renaming still updates the other values.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'newshortname2', 'rename' => 'c1', 'fullname' => 'Another fullname!');
         $defaultdata = array('summary' => 'New summary!');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, $defaultdata, $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, $defaultdata, $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertEquals('c1', $DB->get_field_select('course', 'shortname', 'id = :id', array('id' => $c1->id)));
@@ -809,20 +809,20 @@ class course_test extends \advanced_testcase {
         $this->assertEquals('Another fullname!', $DB->get_field_select('course', 'fullname', 'id = :id', array('id' => $c1->id)));
 
         // Renaming with invalid shortname.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'c1', 'rename' => '<span>invalid</span>');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('invalidshortname', $co->get_errors());
 
         // Renaming with invalid shortname.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $importoptions = array('canrename' => true);
         $data = array('shortname' => 'c1', 'rename' => 'c2');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotrenameshortnamealreadyinuse', $co->get_errors());
     }
@@ -835,11 +835,11 @@ class course_test extends \advanced_testcase {
         $c1 = $this->getDataGenerator()->create_course();
         $c1f1 = $this->getDataGenerator()->create_module('forum', array('course' => $c1->id));
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'A1', 'templatecourse' => $c1->shortname, 'summary' => 'A', 'category' => 1,
             'fullname' => 'A1');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'A1'));
@@ -856,7 +856,7 @@ class course_test extends \advanced_testcase {
         // Restoring twice from the same course should work.
         $data = array('shortname' => 'B1', 'templatecourse' => $c1->shortname, 'summary' => 'B', 'category' => 1,
             'fullname' => 'B1');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'B1'));
@@ -880,11 +880,11 @@ class course_test extends \advanced_testcase {
         $c1f1 = $this->getDataGenerator()->create_module('forum', array('course' => $c1->id));
 
         // Restore from a file, checking that the file takes priority over the templatecourse.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'A1', 'backupfile' => __DIR__ . '/fixtures/backup.mbz',
             'summary' => 'A', 'category' => 1, 'fullname' => 'A1', 'templatecourse' => $c1->shortname);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'A1'));
@@ -903,7 +903,7 @@ class course_test extends \advanced_testcase {
         // Restoring twice from the same file should work.
         $data = array('shortname' => 'B1', 'backupfile' => __DIR__ . '/fixtures/backup.mbz',
             'summary' => 'B', 'category' => 1, 'fullname' => 'B1');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'B1'));
@@ -933,11 +933,11 @@ class course_test extends \advanced_testcase {
 
         $c1 = $this->getDataGenerator()->create_course();
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'A1', 'backupfile' => __DIR__ . '/fixtures/backup.mbz',
             'summary' => 'A', 'category' => 1, 'fullname' => 'A1', 'templatecourse' => $c1->shortname);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $course = $DB->get_record('course', array('shortname' => 'A1'));
@@ -951,20 +951,20 @@ class course_test extends \advanced_testcase {
         $this->resetAfterTest();
 
         // Restore from a non-existing file should not be allowed.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'A1', 'backupfile' => '/lead/no/where',
             'category' => 1, 'fullname' => 'A1');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotreadbackupfile', $co->get_errors());
 
         // Restore from an invalid file should not be allowed.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'A1', 'backupfile' => __FILE__,
             'category' => 1, 'fullname' => 'A1');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
 
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('invalidbackupfile', $co->get_errors());
@@ -978,11 +978,11 @@ class course_test extends \advanced_testcase {
         $this->resetAfterTest();
 
         // Restore from an invalid file should not be allowed.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'A1', 'templatecourse' => 'iamnotavalidcourse',
             'category' => 1, 'fullname' => 'A1');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('coursetorestorefromdoesnotexist', $co->get_errors());
     }
@@ -1009,10 +1009,10 @@ class course_test extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('groups_members', array('groupid' => $g1->id, 'userid' => $u1->id)));
 
         // Wrong mode.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'DoesNotExist', 'reset' => '1', 'summary' => 'summary', 'fullname' => 'FN', 'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('canonlyresetcourseinupdatemode', $co->get_errors());
         $this->assertTrue($DB->record_exists('groups', array('id' => $g1->id)));
@@ -1020,11 +1020,11 @@ class course_test extends \advanced_testcase {
         $this->assertCount(1, get_enrolled_users($c1ctx));
 
         // Reset not allowed.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname, 'reset' => '1');
         $importoptions = array('canreset' => false);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('courseresetnotallowed', $co->get_errors());
         $this->assertTrue($DB->record_exists('groups', array('id' => $g1->id)));
@@ -1032,11 +1032,11 @@ class course_test extends \advanced_testcase {
         $this->assertCount(1, get_enrolled_users($c1ctx));
 
         // Reset allowed but not requested.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname, 'reset' => '0');
         $importoptions = array('canreset' => true);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertTrue($DB->record_exists('groups', array('id' => $g1->id)));
@@ -1044,11 +1044,11 @@ class course_test extends \advanced_testcase {
         $this->assertCount(1, get_enrolled_users($c1ctx));
 
         // Reset passed as a default parameter, should not be taken in account.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname);
         $importoptions = array('canreset' => true);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array('reset' => 1), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array('reset' => 1), $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertTrue($DB->record_exists('groups', array('id' => $g1->id)));
@@ -1056,11 +1056,11 @@ class course_test extends \advanced_testcase {
         $this->assertCount(1, get_enrolled_users($c1ctx));
 
         // Reset executed from data.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname, 'reset' => 1);
         $importoptions = array('canreset' => true);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $co->proceed();
         $this->assertFalse($DB->record_exists('groups', array('id' => $g1->id)));
@@ -1068,11 +1068,11 @@ class course_test extends \advanced_testcase {
         $this->assertCount(0, get_enrolled_users($c1ctx));
 
         // Reset executed from import option.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname, 'reset' => 0);
         $importoptions = array('reset' => 1, 'canreset' => true);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
 
         $g1 = $this->getDataGenerator()->create_group(array('courseid' => $c1->id));
         $this->getDataGenerator()->create_group_member(array('groupid' => $g1->id, 'userid' => $u1->id));
@@ -1087,36 +1087,36 @@ class course_test extends \advanced_testcase {
         $this->resetAfterTest(true);
 
         // Ensure fails when category cannot be resolved upon creation.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'c1', 'summary' => 'summary', 'fullname' => 'FN', 'category' => 'Wrong cat');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('couldnotresolvecatgorybyid', $co->get_errors());
 
         // Ensure fails when category is 0 on create.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'c1', 'summary' => 'summary', 'fullname' => 'FN', 'category' => '0');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('missingmandatoryfields', $co->get_errors());
 
         // Ensure fails when category cannot be resolved upon update.
         $c1 = $this->getDataGenerator()->create_course();
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname, 'category' => 'Wrong cat');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('couldnotresolvecatgorybyid', $co->get_errors());
 
         // Ensure does not update the category when it is 0.
         $c1 = $this->getDataGenerator()->create_course();
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname, 'category' => '0');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $this->assertEmpty($co->get_errors());
         $this->assertEmpty($co->get_statuses());
@@ -1125,11 +1125,11 @@ class course_test extends \advanced_testcase {
 
         // Ensure does not update the category when it is set to 0 in the defaults.
         $c1 = $this->getDataGenerator()->create_course();
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS;
         $data = array('shortname' => $c1->shortname);
         $defaults = array('category' => '0');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, $defaults);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, $defaults);
         $this->assertTrue($co->prepare());
         $this->assertEmpty($co->get_errors());
         $this->assertEmpty($co->get_statuses());
@@ -1143,15 +1143,15 @@ class course_test extends \advanced_testcase {
         // We need to set the current user as one with the capability to edit manual enrolment instances in the new course.
         $this->setAdminUser();
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'c1', 'summary' => 'S', 'fullname' => 'FN', 'category' => '1');
         $data['enrolment_1'] = 'manual';
         $data['enrolment_1_role'] = 'teacher';
         $data['enrolment_1_startdate'] = '2nd July 2013';
         $data['enrolment_1_enddate'] = '2nd August 2013';
         $data['enrolment_1_enrolperiod'] = '10 days';
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertTrue($co->prepare());
         $co->proceed();
 
@@ -1218,10 +1218,10 @@ class course_test extends \advanced_testcase {
         role_assign($roleid, $user->id, $categorycontext);
         role_change_permission($roleid, $categorycontext, 'enrol/manual:config', CAP_PROHIBIT);
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, array_merge($uploaddata, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, array_merge($uploaddata, [
             'category' => $category->id,
             'fullname' => 'My course',
         ]));
@@ -1233,7 +1233,7 @@ class course_test extends \advanced_testcase {
         $errors = $upload->get_errors();
         $this->assertArrayHasKey($expectederror, $errors);
 
-        $this->assertEquals(get_string($expectederror, 'tool_uploadcourse', 'Manual enrolments'),
+        $this->assertEquals(get_string($expectederror, 'tool_bulkenrollment', 'Manual enrolments'),
             (string) $errors[$expectederror]);
     }
 
@@ -1272,17 +1272,17 @@ class course_test extends \advanced_testcase {
         $this->assertCount(1, $instances);
         $this->assertEquals('manual', reset($instances)->enrol);
 
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, $uploaddata);
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, $uploaddata);
 
         $this->assertFalse($upload->prepare());
 
         $errors = $upload->get_errors();
         $this->assertArrayHasKey($expectederror, $errors);
 
-        $this->assertEquals(get_string($expectederror, 'tool_uploadcourse', 'Manual enrolments'),
+        $this->assertEquals(get_string($expectederror, 'tool_bulkenrollment', 'Manual enrolments'),
             (string) $errors[$expectederror]);
     }
 
@@ -1302,8 +1302,8 @@ class course_test extends \advanced_testcase {
         $this->create_custom_field($category, 'textarea', 'mytextareafield');
 
         // Perform upload.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $dataupload = [
             'shortname' => $course->shortname,
             'customfield_mydatefield' => '2020-04-01 16:00',
@@ -1311,7 +1311,7 @@ class course_test extends \advanced_testcase {
             'customfield_mytextareafield' => 'Is it me you\'re looking for?',
         ];
 
-        $uploader = new tool_uploadcourse_course($mode, $updatemode, $dataupload);
+        $uploader = new tool_bulkenrollment_course($mode, $updatemode, $dataupload);
         $this->assertTrue($uploader->prepare());
         $uploader->proceed();
 
@@ -1335,14 +1335,14 @@ class course_test extends \advanced_testcase {
         $category = $this->get_customfield_generator()->create_category();
         $this->create_custom_field($category, 'select', 'myselect', ['required' => true, 'options' => "Cat\nDog"]);
 
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $dataupload = [
             'shortname' => $course->shortname,
             'customfield_myselect' => null,
         ];
 
-        $uploader = new tool_uploadcourse_course($mode, $updatemode, $dataupload);
+        $uploader = new tool_bulkenrollment_course($mode, $updatemode, $dataupload);
         $this->assertFalse($uploader->prepare());
         $this->assertArrayHasKey('customfieldinvalid', $uploader->get_errors());
 
@@ -1351,7 +1351,7 @@ class course_test extends \advanced_testcase {
             'customfield_myselect' => 2, // Our second option: Dog.
         ];
 
-        $uploader = new tool_uploadcourse_course($mode, $updatemode, $dataupload, $defaults);
+        $uploader = new tool_bulkenrollment_course($mode, $updatemode, $dataupload, $defaults);
         $this->assertTrue($uploader->prepare());
         $uploader->proceed();
 
@@ -1374,14 +1374,14 @@ class course_test extends \advanced_testcase {
         $this->create_custom_field($category, 'select', 'myselect',
             ['required' => true, 'options' => "Cat\nDog", 'defaultvalue' => 'Cat']);
 
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $dataupload = [
             'shortname' => $course->shortname,
             'customfield_myselect' => 'Fish', // No, invalid.
         ];
 
-        $uploader = new tool_uploadcourse_course($mode, $updatemode, $dataupload);
+        $uploader = new tool_bulkenrollment_course($mode, $updatemode, $dataupload);
         $this->assertTrue($uploader->prepare());
         $uploader->proceed();
 
@@ -1404,14 +1404,14 @@ class course_test extends \advanced_testcase {
         $this->create_custom_field($category, 'date', 'mydate',
             ['mindate' => strtotime('2020-04-01'), 'maxdate' => '2020-04-30']);
 
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $dataupload = [
             'shortname' => $course->shortname,
             'customfield_mydate' => '2020-05-06', // Out of range.
         ];
 
-        $uploader = new tool_uploadcourse_course($mode, $updatemode, $dataupload);
+        $uploader = new tool_bulkenrollment_course($mode, $updatemode, $dataupload);
         $this->assertFalse($uploader->prepare());
         $this->assertArrayHasKey('customfieldinvalid', $uploader->get_errors());
     }
@@ -1423,29 +1423,29 @@ class course_test extends \advanced_testcase {
         $c2 = $this->getDataGenerator()->create_course();
 
         // Create with existing ID number.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => 'c2', 'summary' => 'summary', 'fullname' => 'FN', 'category' => '1',
             'idnumber' => $c1->idnumber);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('idnumberalreadyinuse', $co->get_errors());
 
         // Rename to existing ID number.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c2->shortname, 'rename' => 'SN', 'idnumber' => $c1->idnumber);
         $importoptions = array('canrename' => true);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotrenameidnumberconflict', $co->get_errors());
 
         // Incrementing shortname increments idnumber.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_ALL;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_ALL;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('shortname' => $c1->shortname, 'idnumber' => $c1->idnumber, 'summary' => 'S', 'fullname' => 'F',
             'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), array());
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), array());
         $this->assertTrue($co->prepare());
         $this->assertArrayHasKey('courseshortnameincremented', $co->get_statuses());
         $this->assertArrayHasKey('courseidnumberincremented', $co->get_statuses());
@@ -1454,11 +1454,11 @@ class course_test extends \advanced_testcase {
         $this->assertEquals('taken_2', $data['idnumber']);
 
         // Incrementing shortname increments idnumber unless available.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_ALL;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_ALL;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('shortname' => $c1->shortname, 'idnumber' => 'nottaken', 'summary' => 'S', 'fullname' => 'F',
             'category' => 1);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), array());
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), array());
         $this->assertTrue($co->prepare());
         $this->assertArrayHasKey('courseshortnameincremented', $co->get_statuses());
         $this->assertArrayNotHasKey('courseidnumberincremented', $co->get_statuses());
@@ -1473,47 +1473,47 @@ class course_test extends \advanced_testcase {
         $c1 = $this->getDataGenerator()->create_course(array('shortname' => 'taken'));
 
         // Generate a shortname.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('summary' => 'summary', 'fullname' => 'FN', 'category' => '1', 'idnumber' => 'IDN');
         $importoptions = array('shortnametemplate' => '%i');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $this->assertArrayHasKey('courseshortnamegenerated', $co->get_statuses());
 
         // Generate a shortname without a template.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('summary' => 'summary', 'fullname' => 'FN', 'category' => '1');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), array());
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), array());
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('missingshortnamenotemplate', $co->get_errors());
 
         // Generate a shortname in update mode.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('summary' => 'summary', 'fullname' => 'FN', 'category' => '1');
         $importoptions = array('shortnametemplate' => '%f');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         // Commented because we never get here as the course without shortname does not exist.
         // $this->assertArrayHasKey('cannotgenerateshortnameupdatemode', $co->get_errors());
 
         // Generate a shortname to a course that already exists.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('summary' => 'summary', 'fullname' => 'taken', 'category' => '1');
         $importoptions = array('shortnametemplate' => '%f');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('generatedshortnamealreadyinuse', $co->get_errors());
 
         // Generate a shortname to a course that already exists will be incremented.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_ALL;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_ALL;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
         $data = array('summary' => 'summary', 'fullname' => 'taken', 'category' => '1');
         $importoptions = array('shortnametemplate' => '%f');
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertTrue($co->prepare());
         $this->assertArrayHasKey('courseshortnamegenerated', $co->get_statuses());
         $this->assertArrayHasKey('courseshortnameincremented', $co->get_statuses());
@@ -1524,39 +1524,39 @@ class course_test extends \advanced_testcase {
         $this->resetAfterTest(true);
 
         // Updating the front page.
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $SITE->shortname, 'idnumber' => 'NewIDN');
         $importoptions = array();
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotupdatefrontpage', $co->get_errors());
 
         // Updating the front page.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $SITE->shortname, 'idnumber' => 'NewIDN');
         $importoptions = array();
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotupdatefrontpage', $co->get_errors());
 
         // Generating a shortname should not be allowed in update mode, and so we cannot update the front page.
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('idnumber' => 'NewIDN', 'fullname' => 'FN', 'category' => 1);
         $importoptions = array('shortnametemplate' => $SITE->shortname);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotgenerateshortnameupdatemode', $co->get_errors());
 
         // Renaming to the front page should not be allowed.
         $c1 = $this->getDataGenerator()->create_course();
-        $mode = tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE;
-        $updatemode = tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY;
         $data = array('shortname' => $c1->shortname, 'fullname' => 'FN', 'idnumber' => 'NewIDN', 'rename' => $SITE->shortname);
         $importoptions = array('canrename' => true);
-        $co = new tool_uploadcourse_course($mode, $updatemode, $data, array(), $importoptions);
+        $co = new tool_bulkenrollment_course($mode, $updatemode, $data, array(), $importoptions);
         $this->assertFalse($co->prepare());
         $this->assertArrayHasKey('cannotrenameshortnamealreadyinuse', $co->get_errors());
     }
@@ -1564,16 +1564,16 @@ class course_test extends \advanced_testcase {
     /**
      * Test when role doesn't exist.
      *
-     * @covers \tool_uploadcourse_course::prepare
+     * @covers \tool_bulkenrollment_course::prepare
      */
     public function test_role_not_exist() {
         $this->resetAfterTest();
         $this->setAdminUser();
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'category' => 1,
             'fullname' => 'Testing',
             'shortname' => 'T101',
@@ -1588,7 +1588,7 @@ class course_test extends \advanced_testcase {
     /**
      * Test when role not allowed in course context.
      *
-     * @covers \tool_uploadcourse_course::proceed
+     * @covers \tool_bulkenrollment_course::proceed
      */
     public function test_role_not_allowed() {
         $this->resetAfterTest();
@@ -1597,10 +1597,10 @@ class course_test extends \advanced_testcase {
         $roleid = create_role('New student role', 'student2', 'New student description', 'student');
         set_role_contextlevels($roleid, [CONTEXT_BLOCK]);
 
-        $mode = tool_uploadcourse_processor::MODE_CREATE_NEW;
-        $updatemode = tool_uploadcourse_processor::UPDATE_NOTHING;
+        $mode = tool_bulkenrollment_processor::MODE_CREATE_NEW;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_NOTHING;
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'category' => 1,
             'fullname' => 'Testing',
             'shortname' => 'T101',
@@ -1615,7 +1615,7 @@ class course_test extends \advanced_testcase {
     /**
      * Test when role is allowed.
      *
-     * @covers \tool_uploadcourse_course::proceed
+     * @covers \tool_bulkenrollment_course::proceed
      */
     public function test_role_allowed() {
         global $DB;
@@ -1623,8 +1623,8 @@ class course_test extends \advanced_testcase {
         $this->resetAfterTest();
         $this->setAdminUser();
 
-        $mode = tool_uploadcourse_processor::MODE_UPDATE_ONLY;
-        $updatemode = tool_uploadcourse_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS;
+        $mode = tool_bulkenrollment_processor::MODE_UPDATE_ONLY;
+        $updatemode = tool_bulkenrollment_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS;
 
         $course = $this->getDataGenerator()->create_course([
             'shortname' => 'c1',
@@ -1636,7 +1636,7 @@ class course_test extends \advanced_testcase {
         $instance = reset($instances);
         $this->assertEquals($studentrole->id, $instance->roleid);
 
-        $upload = new tool_uploadcourse_course($mode, $updatemode, [
+        $upload = new tool_bulkenrollment_course($mode, $updatemode, [
             'shortname' => 'c1',
             'enrolment_1' => 'manual',
             'enrolment_1_role' => 'teacher'

@@ -17,7 +17,7 @@
 /**
  * File containing processor class.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,84 +28,20 @@ require_once($CFG->libdir . '/csvlib.class.php');
 /**
  * Processor class.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_uploadcourse_processor {
-
-    /**
-     * Create courses that do not exist yet.
-     */
-    const MODE_CREATE_NEW = 1;
-
-    /**
-     * Create all courses, appending a suffix to the shortname if the course exists.
-     */
-    const MODE_CREATE_ALL = 2;
-
-    /**
-     * Create courses, and update the ones that already exist.
-     */
-    const MODE_CREATE_OR_UPDATE = 3;
-
-    /**
-     * Only update existing courses.
-     */
-    const MODE_UPDATE_ONLY = 4;
-
-    /**
-     * During update, do not update anything... O_o Huh?!
-     */
-    const UPDATE_NOTHING = 0;
-
-    /**
-     * During update, only use data passed from the CSV.
-     */
-    const UPDATE_ALL_WITH_DATA_ONLY = 1;
-
-    /**
-     * During update, use either data from the CSV, or defaults.
-     */
-    const UPDATE_ALL_WITH_DATA_OR_DEFAUTLS = 2;
-
-    /**
-     * During update, update missing values from either data from the CSV, or defaults.
-     */
-    const UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS = 3;
-
-    /** @var int processor mode. */
-    protected $mode;
-
-    /** @var int upload mode. */
-    protected $updatemode;
-
-    /** @var bool are renames allowed. */
-    protected $allowrenames = false;
-
-    /** @var bool are deletes allowed. */
-    protected $allowdeletes = false;
-
-    /** @var bool are resets allowed. */
-    protected $allowresets = false;
-
-    /** @var string path to a restore file. */
-    protected $restorefile;
-
-    /** @var string shortname of the course to be restored. */
-    protected $templatecourse;
+class tool_bulkenrollment_processor {
 
     /** @var string reset courses after processing them. */
     protected $reset;
 
-    /** @var string template to generate a course shortname. */
-    protected $shortnametemplate;
-
     /** @var csv_import_reader */
     protected $cir;
 
-    /** @var array default values. */
-    protected $defaults = array();
+    /** @var array option values. */
+    protected $options = array();
 
     /** @var array CSV columns. */
     protected $columns = array();
@@ -124,50 +60,11 @@ class tool_uploadcourse_processor {
      *
      * @param csv_import_reader $cir import reader object
      * @param array $options options of the process
-     * @param array $defaults default data value
      */
-    public function __construct(csv_import_reader $cir, array $options, array $defaults = array()) {
-
-        if (!isset($options['mode']) || !in_array($options['mode'], array(self::MODE_CREATE_NEW, self::MODE_CREATE_ALL,
-                self::MODE_CREATE_OR_UPDATE, self::MODE_UPDATE_ONLY))) {
-            throw new coding_exception('Unknown process mode');
-        }
-
-        // Force int to make sure === comparison work as expected.
-        $this->mode = (int) $options['mode'];
-
-
-        $this->updatemode = self::UPDATE_NOTHING;
-        if (isset($options['updatemode'])) {
-            // Force int to make sure === comparison work as expected.
-            $this->updatemode = (int) $options['updatemode'];
-        }
-        if (isset($options['allowrenames'])) {
-            $this->allowrenames = $options['allowrenames'];
-        }
-        if (isset($options['allowdeletes'])) {
-            $this->allowdeletes = $options['allowdeletes'];
-        }
-        if (isset($options['allowresets'])) {
-            $this->allowresets = $options['allowresets'];
-        }
-
-        if (isset($options['restorefile'])) {
-            $this->restorefile = $options['restorefile'];
-        }
-        if (isset($options['templatecourse'])) {
-            $this->templatecourse = $options['templatecourse'];
-        }
-        if (isset($options['reset'])) {
-            $this->reset = $options['reset'];
-        }
-        if (isset($options['shortnametemplate'])) {
-            $this->shortnametemplate = $options['shortnametemplate'];
-        }
-
+    public function __construct(csv_import_reader $cir, array $options) {
         $this->cir = $cir;
         $this->columns = $cir->get_columns();
-        $this->defaults = $defaults;
+        $this->options = $options;
         $this->validate();
         $this->reset();
     }
@@ -185,14 +82,12 @@ class tool_uploadcourse_processor {
         $this->processstarted = true;
 
         if (empty($tracker)) {
-            $tracker = new tool_uploadcourse_tracker(tool_uploadcourse_tracker::NO_OUTPUT);
+            $tracker = new tool_bulkenrollment_tracker(tool_bulkenrollment_tracker::NO_OUTPUT);
         }
         $tracker->start();
 
         $total = 0;
         $created = 0;
-        $updated = 0;
-        $deleted = 0;
         $errors = 0;
 
         // We will most certainly need extra time and memory to process big files.
@@ -204,52 +99,40 @@ class tool_uploadcourse_processor {
             $this->linenb++;
             $total++;
 
-            $data = $this->parse_line($line);
-            $course = $this->get_course($data);
-            if ($course->prepare()) {
-                $course->proceed();
+            $data = $this->parse_line($line); //array that contains csv data
+            $enrollment = $this->get_enrollment($data); //array to enrol pbject
+            if ($enrollment->prepare()) { //prepare make it possiable to view, procesed does enrollment
+                $enrollment->proceed();
 
-                $status = $course->get_statuses();
+                $status = $enrollment->get_statuses();
                 if (array_key_exists('coursecreated', $status)) {
                     $created++;
-                } else if (array_key_exists('courseupdated', $status)) {
-                    $updated++;
-                } else if (array_key_exists('coursedeleted', $status)) {
-                    $deleted++;
                 }
 
-                $data = array_merge($data, $course->get_data(), array('id' => $course->get_id()));
+                $data = array_merge($data, $enrollment->get_data(), array('id' => $enrollment->get_id()));
                 $tracker->output($this->linenb, true, $status, $data);
-                if ($course->has_errors()) {
+                if ($enrollment->has_errors()) {
                     $errors++;
-                    $tracker->output($this->linenb, false, $course->get_errors(), $data);
+                    $tracker->output($this->linenb, false, $enrollment->get_errors(), $data);
                 }
             } else {
                 $errors++;
-                $tracker->output($this->linenb, false, $course->get_errors(), $data);
+                $tracker->output($this->linenb, false, $enrollment->get_errors(), $data);
             }
         }
 
         $tracker->finish();
-        $tracker->results($total, $created, $updated, $deleted, $errors);
+        $tracker->results($total, $created, $errors);
     }
 
     /**
      * Return a course import object.
      *
      * @param array $data data to import the course with.
-     * @return tool_uploadcourse_course
+     * @return tool_bulkenrollment_course
      */
-    protected function get_course($data) {
-        $importoptions = array(
-            'candelete' => $this->allowdeletes,
-            'canrename' => $this->allowrenames,
-            'canreset' => $this->allowresets,
-            'reset' => $this->reset,
-            'restoredir' => $this->get_restore_content_dir(),
-            'shortnametemplate' => $this->shortnametemplate
-        );
-        return new tool_uploadcourse_course($this->mode, $this->updatemode, $data, $this->defaults, $importoptions);
+    protected function get_enrollment($data) {
+        return new tool_bulkenrollment_course($this->$data, $this->options); //calling enrollment.php to create enrollment object and do enrollment
     }
 
     /**
@@ -259,25 +142,6 @@ class tool_uploadcourse_processor {
      */
     public function get_errors() {
         return $this->errors;
-    }
-
-    /**
-     * Get the directory of the object to restore.
-     *
-     * @return string subdirectory in $CFG->backuptempdir/...
-     */
-    protected function get_restore_content_dir() {
-        $backupfile = null;
-        $shortname = null;
-
-        if (!empty($this->restorefile)) {
-            $backupfile = $this->restorefile;
-        } else if (!empty($this->templatecourse) || is_numeric($this->templatecourse)) {
-            $shortname = $this->templatecourse;
-        }
-
-        $dir = tool_uploadcourse_helper::get_restore_content_dir($backupfile, $shortname);
-        return $dir;
     }
 
     /**
@@ -335,7 +199,7 @@ class tool_uploadcourse_processor {
         $this->processstarted = true;
 
         if (empty($tracker)) {
-            $tracker = new tool_uploadcourse_tracker(tool_uploadcourse_tracker::NO_OUTPUT);
+            $tracker = new tool_bulkenrollment_tracker(tool_bulkenrollment_tracker::NO_OUTPUT);
         }
         $tracker->start();
 
@@ -348,7 +212,7 @@ class tool_uploadcourse_processor {
         while (($line = $this->cir->next()) && $rows > $this->linenb) {
             $this->linenb++;
             $data = $this->parse_line($line);
-            $course = $this->get_course($data);
+            $course = $this->get_enrollment($data);
             $result = $course->prepare();
             if (!$result) {
                 $tracker->output($this->linenb, $result, $course->get_errors(), $data);

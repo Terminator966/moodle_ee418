@@ -1,4 +1,4 @@
-@tool @tool_uploadcourse @_file_upload
+@tool @tool_bulkenrollment @_file_upload
 Feature: An admin can update courses using a CSV file
   In order to update courses using a CSV file
   As an admin
@@ -14,7 +14,7 @@ Feature: An admin can update courses using a CSV file
 
   @javascript
   Scenario: Updating a course fullname
-    Given I upload "admin/tool/uploadcourse/tests/fixtures/courses.csv" file to "File" filemanager
+    Given I upload "admin/tool/bulkenrollment/tests/fixtures/courses.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Only update existing courses"
     And I set the field "Update mode" to "Update with CSV data only"
     And I click on "Preview" "button"
@@ -42,7 +42,7 @@ Feature: An admin can update courses using a CSV file
       | Field 3 | Other    | select   | select    | {"options":"a\nb\nc"} |
       | Field 4 | Other    | text     | text      |                       |
       | Field 5 | Other    | textarea | textarea  |                       |
-    When I upload "admin/tool/uploadcourse/tests/fixtures/courses_custom_fields.csv" file to "File" filemanager
+    When I upload "admin/tool/bulkenrollment/tests/fixtures/courses_custom_fields.csv" file to "File" filemanager
     And I set the following fields to these values:
       | Upload mode | Only update existing courses |
       | Update mode | Update with CSV data only    |

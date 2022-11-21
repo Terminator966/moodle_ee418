@@ -17,7 +17,7 @@
 /**
  * Strings for component 'tool_bulkenrollment'.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2011 Piers Harding
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -39,7 +39,12 @@ $string['cannotrenameshortnamealreadyinuse'] = 'Cannot rename the course, the sh
 $string['cannotupdatefrontpage'] = 'You are not allowed to change the site home.';
 $string['canonlyrenameinupdatemode'] = 'Can only rename a course when update is allowed';
 $string['canonlyresetcourseinupdatemode'] = 'Can only reset a course in update mode';
-$string['couldnotresolvecatgorybyid'] = 'Could not resolve category by ID';
+//TODO; EDIT later
+//!!!!!!!!
+$string['couldnotresolveusernamebyid'] = 'Could not resolve username by ID';
+$string['couldnotresolvecatgorybysname'] = 'Could not resolve category by ID';
+$string['couldnotresolvecatgorybycourse'] = 'Could not resolve category by ID';
+
 $string['couldnotresolvecatgorybyidnumber'] = 'Could not resolve category by ID number';
 $string['couldnotresolvecatgorybypath'] = 'Could not resolve category by path';
 $string['coursecreated'] = 'Course created';

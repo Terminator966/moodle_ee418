@@ -1,4 +1,4 @@
-@tool @tool_uploadcourse @_file_upload
+@tool @tool_bulkenrollment @_file_upload
 Feature: An admin can update courses enrolments using a CSV file
   In order to update courses enrolments using a CSV file
   As an admin
@@ -17,7 +17,7 @@ Feature: An admin can update courses enrolments using a CSV file
     And I click on "Continue" "button"
     And I should not see "Guest access" in the "generaltable" "table"
     And I navigate to "Courses > Upload courses" in site administration
-    And I upload "admin/tool/uploadcourse/tests/fixtures/enrolment_enable.csv" file to "File" filemanager
+    And I upload "admin/tool/bulkenrollment/tests/fixtures/enrolment_enable.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Only update existing courses"
     And I set the field "Update mode" to "Update with CSV data only"
     And I set the field "Allow deletes" to "Yes"
@@ -34,7 +34,7 @@ Feature: An admin can update courses enrolments using a CSV file
     And I click on "Continue" "button"
     And I should not see "Guest access" in the "generaltable" "table"
     And I navigate to "Courses > Upload courses" in site administration
-    And I upload "admin/tool/uploadcourse/tests/fixtures/enrolment_disable.csv" file to "File" filemanager
+    And I upload "admin/tool/bulkenrollment/tests/fixtures/enrolment_disable.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Only update existing courses"
     And I set the field "Update mode" to "Update with CSV data only"
     And I set the field "Allow deletes" to "Yes"
@@ -47,7 +47,7 @@ Feature: An admin can update courses enrolments using a CSV file
   @javascript
   Scenario: Enabling enrolment method
     Given I navigate to "Courses > Upload courses" in site administration
-    And I upload "admin/tool/uploadcourse/tests/fixtures/enrolment_enable.csv" file to "File" filemanager
+    And I upload "admin/tool/bulkenrollment/tests/fixtures/enrolment_enable.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Only update existing courses"
     And I set the field "Update mode" to "Update with CSV data only"
     And I set the field "Allow deletes" to "Yes"
@@ -63,7 +63,7 @@ Feature: An admin can update courses enrolments using a CSV file
     And I click on "Enable" "link" in the "Guest access" "table_row"
     And "Disable" "icon" should exist in the "Guest access" "table_row"
     And I navigate to "Courses > Upload courses" in site administration
-    And I upload "admin/tool/uploadcourse/tests/fixtures/enrolment_disable.csv" file to "File" filemanager
+    And I upload "admin/tool/bulkenrollment/tests/fixtures/enrolment_disable.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Only update existing courses"
     And I set the field "Update mode" to "Update with CSV data only"
     And I set the field "Allow deletes" to "Yes"
@@ -76,7 +76,7 @@ Feature: An admin can update courses enrolments using a CSV file
   @javascript
   Scenario: Delete an enrolment method
     Given I navigate to "Courses > Upload courses" in site administration
-    And I upload "admin/tool/uploadcourse/tests/fixtures/enrolment_delete.csv" file to "File" filemanager
+    And I upload "admin/tool/bulkenrollment/tests/fixtures/enrolment_delete.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Only update existing courses"
     And I set the field "Update mode" to "Update with CSV data only"
     And I set the field "Allow deletes" to "Yes"
@@ -93,7 +93,7 @@ Feature: An admin can update courses enrolments using a CSV file
     And I click on "Continue" "button"
     And I should not see "Guest access" in the "generaltable" "table"
     And I navigate to "Courses > Upload courses" in site administration
-    And I upload "admin/tool/uploadcourse/tests/fixtures/enrolment_delete.csv" file to "File" filemanager
+    And I upload "admin/tool/bulkenrollment/tests/fixtures/enrolment_delete.csv" file to "File" filemanager
     And I set the field "Upload mode" to "Only update existing courses"
     And I set the field "Update mode" to "Update with CSV data only"
     And I set the field "Allow deletes" to "Yes"

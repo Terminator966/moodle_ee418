@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace tool_uploadcourse;
+namespace tool_bulkenrollment;
 
-use tool_uploadcourse_helper;
+use tool_bulkenrollment_helper;
 
 /**
  * Helper test case.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,24 +30,24 @@ class helper_test extends \advanced_testcase {
     public function test_generate_shortname() {
         $data = (object) array('fullname' => 'Ah bh Ch 01 02 03', 'idnumber' => 'ID123');
 
-        $this->assertSame($data->fullname, tool_uploadcourse_helper::generate_shortname($data, '%f'));
-        $this->assertSame($data->idnumber, tool_uploadcourse_helper::generate_shortname($data, '%i'));
-        $this->assertSame('Ah Bh Ch', tool_uploadcourse_helper::generate_shortname($data, '%~8f'));
-        $this->assertSame('AH BH CH', tool_uploadcourse_helper::generate_shortname($data, '%+8f'));
-        $this->assertSame('id123', tool_uploadcourse_helper::generate_shortname($data, '%-i'));
-        $this->assertSame('[Ah bh Ch] = ID123', tool_uploadcourse_helper::generate_shortname($data, '[%8f] = %i'));
-        $this->assertSame('0', tool_uploadcourse_helper::generate_shortname($data, '0'));
-        $this->assertSame('%unknown', tool_uploadcourse_helper::generate_shortname($data, '%unknown'));
+        $this->assertSame($data->fullname, tool_bulkenrollment_helper::generate_shortname($data, '%f'));
+        $this->assertSame($data->idnumber, tool_bulkenrollment_helper::generate_shortname($data, '%i'));
+        $this->assertSame('Ah Bh Ch', tool_bulkenrollment_helper::generate_shortname($data, '%~8f'));
+        $this->assertSame('AH BH CH', tool_bulkenrollment_helper::generate_shortname($data, '%+8f'));
+        $this->assertSame('id123', tool_bulkenrollment_helper::generate_shortname($data, '%-i'));
+        $this->assertSame('[Ah bh Ch] = ID123', tool_bulkenrollment_helper::generate_shortname($data, '[%8f] = %i'));
+        $this->assertSame('0', tool_bulkenrollment_helper::generate_shortname($data, '0'));
+        $this->assertSame('%unknown', tool_bulkenrollment_helper::generate_shortname($data, '%unknown'));
 
-        $this->assertNull(tool_uploadcourse_helper::generate_shortname($data, ''));
-        $this->assertNull(tool_uploadcourse_helper::generate_shortname(array(), '%f'));
+        $this->assertNull(tool_bulkenrollment_helper::generate_shortname($data, ''));
+        $this->assertNull(tool_bulkenrollment_helper::generate_shortname(array(), '%f'));
     }
 
     public function test_get_course_formats() {
-        $result = tool_uploadcourse_helper::get_course_formats();
+        $result = tool_bulkenrollment_helper::get_course_formats();
         $this->assertSame(array_keys(\core_component::get_plugin_list('format')), $result);
         // Should be similar as first result, as cached.
-        $this->assertSame($result, tool_uploadcourse_helper::get_course_formats());
+        $this->assertSame($result, tool_bulkenrollment_helper::get_course_formats());
     }
 
     public function test_get_enrolment_data() {
@@ -93,15 +93,15 @@ class helper_test extends \advanced_testcase {
                 'test1' => 'test1',
             )
         );
-        $this->assertSame(tool_uploadcourse_helper::get_enrolment_data($data), $expected);
+        $this->assertSame(tool_bulkenrollment_helper::get_enrolment_data($data), $expected);
     }
 
     public function test_get_enrolment_plugins() {
         $this->resetAfterTest(true);
-        $actual = tool_uploadcourse_helper::get_enrolment_plugins();
+        $actual = tool_bulkenrollment_helper::get_enrolment_plugins();
         $this->assertSame(array_keys(enrol_get_plugins(false)), array_keys($actual));
         // This should be identical as cached.
-        $secondactual = tool_uploadcourse_helper::get_enrolment_plugins();
+        $secondactual = tool_bulkenrollment_helper::get_enrolment_plugins();
         $this->assertEquals($actual, $secondactual);
     }
 
@@ -135,40 +135,40 @@ class helper_test extends \advanced_testcase {
         $CFG->keeptempdirectoriesonbackup = true;
 
         // Checking restore dir.
-        $dir = tool_uploadcourse_helper::get_restore_content_dir($c1backupfile, null);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir($c1backupfile, null);
         $bcinfo = \backup_general_helper::get_backup_information($dir);
         $this->assertEquals($bcinfo->original_course_id, $c1->id);
         $this->assertEquals($bcinfo->original_course_fullname, $c1->fullname);
 
         // Do it again, it should be the same directory.
-        $dir2 = tool_uploadcourse_helper::get_restore_content_dir($c1backupfile, null);
+        $dir2 = tool_bulkenrollment_helper::get_restore_content_dir($c1backupfile, null);
         $this->assertEquals($dir, $dir2);
 
         // Get the second course.
-        $dir = tool_uploadcourse_helper::get_restore_content_dir($c2backupfile, null);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir($c2backupfile, null);
         $bcinfo = \backup_general_helper::get_backup_information($dir);
         $this->assertEquals($bcinfo->original_course_id, $c2->id);
         $this->assertEquals($bcinfo->original_course_fullname, $c2->fullname);
 
         // Checking with a shortname.
-        $dir = tool_uploadcourse_helper::get_restore_content_dir(null, $c1->shortname);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir(null, $c1->shortname);
         $bcinfo = \backup_general_helper::get_backup_information($dir);
         $this->assertEquals($bcinfo->original_course_id, $c1->id);
         $this->assertEquals($bcinfo->original_course_fullname, $c1->fullname);
 
         // Do it again, it should be the same directory.
-        $dir2 = tool_uploadcourse_helper::get_restore_content_dir(null, $c1->shortname);
+        $dir2 = tool_bulkenrollment_helper::get_restore_content_dir(null, $c1->shortname);
         $this->assertEquals($dir, $dir2);
 
         // Get the second course.
-        $dir = tool_uploadcourse_helper::get_restore_content_dir(null, $c2->shortname);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir(null, $c2->shortname);
         $bcinfo = \backup_general_helper::get_backup_information($dir);
         $this->assertEquals($bcinfo->original_course_id, $c2->id);
         $this->assertEquals($bcinfo->original_course_fullname, $c2->fullname);
 
         // Get a course that does not exist.
         $errors = array();
-        $dir = tool_uploadcourse_helper::get_restore_content_dir(null, 'DoesNotExist', $errors);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir(null, 'DoesNotExist', $errors);
         $this->assertFalse($dir);
         $this->assertArrayHasKey('coursetorestorefromdoesnotexist', $errors);
 
@@ -176,21 +176,21 @@ class helper_test extends \advanced_testcase {
         $CFG->keeptempdirectoriesonbackup = false;
 
         // Checking restore dir.
-        $dir = tool_uploadcourse_helper::get_restore_content_dir($c1backupfile, null);
-        $dir2 = tool_uploadcourse_helper::get_restore_content_dir($c1backupfile, null);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir($c1backupfile, null);
+        $dir2 = tool_bulkenrollment_helper::get_restore_content_dir($c1backupfile, null);
         $this->assertNotEquals($dir, $dir2);
 
         // Checking with a shortname.
-        $dir = tool_uploadcourse_helper::get_restore_content_dir(null, $c1->shortname);
-        $dir2 = tool_uploadcourse_helper::get_restore_content_dir(null, $c1->shortname);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir(null, $c1->shortname);
+        $dir2 = tool_bulkenrollment_helper::get_restore_content_dir(null, $c1->shortname);
         $this->assertNotEquals($dir, $dir2);
 
         // Get a course that does not exist.
         $errors = array();
-        $dir = tool_uploadcourse_helper::get_restore_content_dir(null, 'DoesNotExist', $errors);
+        $dir = tool_bulkenrollment_helper::get_restore_content_dir(null, 'DoesNotExist', $errors);
         $this->assertFalse($dir);
         $this->assertArrayHasKey('coursetorestorefromdoesnotexist', $errors);
-        $dir2 = tool_uploadcourse_helper::get_restore_content_dir(null, 'DoesNotExist', $errors);
+        $dir2 = tool_bulkenrollment_helper::get_restore_content_dir(null, 'DoesNotExist', $errors);
         $this->assertEquals($dir, $dir2);
 
         $CFG->keeptempdirectoriesonbackup = $oldcfg;
@@ -205,11 +205,11 @@ class helper_test extends \advanced_testcase {
             $expected[$role->shortname] = $role->id;
         }
 
-        $actual = tool_uploadcourse_helper::get_role_ids();
+        $actual = tool_bulkenrollment_helper::get_role_ids();
         $this->assertSame($actual, $expected);
 
         // Check cache.
-        $this->assertSame($actual, tool_uploadcourse_helper::get_role_ids());
+        $this->assertSame($actual, tool_bulkenrollment_helper::get_role_ids());
     }
 
     public function test_get_role_names() {
@@ -226,7 +226,7 @@ class helper_test extends \advanced_testcase {
         );
 
         // Get the role IDs, but need to force the cache reset as a new role is defined.
-        $roleids = tool_uploadcourse_helper::get_role_ids(true);
+        $roleids = tool_bulkenrollment_helper::get_role_ids(true);
 
         $expected = array(
             'role_' . $roleids['student'] => 'Padawan',
@@ -237,7 +237,7 @@ class helper_test extends \advanced_testcase {
         );
 
         $errors = array();
-        $actual = tool_uploadcourse_helper::get_role_names($data, $errors);
+        $actual = tool_bulkenrollment_helper::get_role_names($data, $errors);
         $this->assertSame($actual, $expected);
         $this->assertArrayHasKey('invalidroles', $errors);
     }
@@ -259,7 +259,7 @@ class helper_test extends \advanced_testcase {
         $textfield = $this->create_custom_field($category, 'text', 'mytext', ['locked' => 1]);
         $textareafield = $this->create_custom_field($category, 'textarea', 'mytextarea');
 
-        $fields = tool_uploadcourse_helper::get_custom_course_fields();
+        $fields = tool_bulkenrollment_helper::get_custom_course_fields();
         $this->assertCount(5, $fields);
 
         $this->assertArrayHasKey($checkboxfield->get('shortname'), $fields);
@@ -298,11 +298,11 @@ class helper_test extends \advanced_testcase {
 
         $context = \context_course::instance($course->id);
 
-        $this->assertEquals($expected, tool_uploadcourse_helper::get_custom_course_field_data($data, [], $context));
+        $this->assertEquals($expected, tool_bulkenrollment_helper::get_custom_course_field_data($data, [], $context));
 
         // Now add our custom textarea field (separately because the value of it's 'itemid' element is unknown).
         $data['customfield_mytextarea'] = 'Something';
-        $fields = tool_uploadcourse_helper::get_custom_course_field_data($data, [], $context);
+        $fields = tool_bulkenrollment_helper::get_custom_course_field_data($data, [], $context);
         $this->assertArrayHasKey('customfield_mytextarea_editor', $fields);
         $this->assertArrayHasKey('text', $fields['customfield_mytextarea_editor']);
         $this->assertEquals('Something', $fields['customfield_mytextarea_editor']['text']);
@@ -312,7 +312,7 @@ class helper_test extends \advanced_testcase {
         role_change_permission($managerrole->id, $context, 'moodle/course:changelockedcustomfields', CAP_PROHIBIT);
 
         // The locked 'mytext' custom field should not be returned.
-        $fields = tool_uploadcourse_helper::get_custom_course_field_data($data, [], $context);
+        $fields = tool_bulkenrollment_helper::get_custom_course_field_data($data, [], $context);
         $this->assertCount(4, $fields);
         $this->assertArrayNotHasKey('customfield_mytext', $fields);
     }
@@ -324,9 +324,9 @@ class helper_test extends \advanced_testcase {
         $c2 = $this->getDataGenerator()->create_course(array('idnumber' => 'C2'));
         $c3 = $this->getDataGenerator()->create_course(array('idnumber' => 'Yo'));
 
-        $this->assertEquals('C3', tool_uploadcourse_helper::increment_idnumber('C1'));
-        $this->assertEquals('Yo_2', tool_uploadcourse_helper::increment_idnumber('Yo'));
-        $this->assertEquals('DoesNotExist', tool_uploadcourse_helper::increment_idnumber('DoesNotExist'));
+        $this->assertEquals('C3', tool_bulkenrollment_helper::increment_idnumber('C1'));
+        $this->assertEquals('Yo_2', tool_bulkenrollment_helper::increment_idnumber('Yo'));
+        $this->assertEquals('DoesNotExist', tool_bulkenrollment_helper::increment_idnumber('DoesNotExist'));
     }
 
     public function test_increment_shortname() {
@@ -337,9 +337,9 @@ class helper_test extends \advanced_testcase {
         $c3 = $this->getDataGenerator()->create_course(array('shortname' => 'Yo'));
 
         // FYI: increment_shortname assumes that the course exists, and so increment the shortname immediately.
-        $this->assertEquals('C3', tool_uploadcourse_helper::increment_shortname('C1'));
-        $this->assertEquals('Yo_2', tool_uploadcourse_helper::increment_shortname('Yo'));
-        $this->assertEquals('DoesNotExist_2', tool_uploadcourse_helper::increment_shortname('DoesNotExist'));
+        $this->assertEquals('C3', tool_bulkenrollment_helper::increment_shortname('C1'));
+        $this->assertEquals('Yo_2', tool_bulkenrollment_helper::increment_shortname('Yo'));
+        $this->assertEquals('DoesNotExist_2', tool_bulkenrollment_helper::increment_shortname('DoesNotExist'));
     }
 
     public function test_resolve_category() {
@@ -355,24 +355,24 @@ class helper_test extends \advanced_testcase {
             'category_idnumber' => $c3->idnumber,
         );
 
-        $this->assertEquals($c1->id, tool_uploadcourse_helper::resolve_category($data));
+        $this->assertEquals($c1->id, tool_bulkenrollment_helper::resolve_category($data));
         unset($data['category']);
-        $this->assertEquals($c3->id, tool_uploadcourse_helper::resolve_category($data));
+        $this->assertEquals($c3->id, tool_bulkenrollment_helper::resolve_category($data));
         unset($data['category_idnumber']);
-        $this->assertEquals($c2->id, tool_uploadcourse_helper::resolve_category($data));
+        $this->assertEquals($c2->id, tool_bulkenrollment_helper::resolve_category($data));
 
         // Adding unexisting data.
         $errors = array();
         $data['category_idnumber'] = 1234;
-        $this->assertEquals($c2->id, tool_uploadcourse_helper::resolve_category($data, $errors));
+        $this->assertEquals($c2->id, tool_bulkenrollment_helper::resolve_category($data, $errors));
         $this->assertArrayHasKey('couldnotresolvecatgorybyidnumber', $errors);
         $errors = array();
         $data['category'] = 1234;
-        $this->assertEquals($c2->id, tool_uploadcourse_helper::resolve_category($data, $errors));
+        $this->assertEquals($c2->id, tool_bulkenrollment_helper::resolve_category($data, $errors));
         $this->assertArrayHasKey('couldnotresolvecatgorybyid', $errors);
         $errors = array();
         $data['category_path'] = 'Not exist';
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category($data, $errors));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category($data, $errors));
         $this->assertArrayHasKey('couldnotresolvecatgorybypath', $errors);
     }
 
@@ -383,12 +383,12 @@ class helper_test extends \advanced_testcase {
         $c2 = $this->getDataGenerator()->create_category(array('idnumber' => 'C2'));
 
         // Doubled for cache check.
-        $this->assertEquals($c1->id, tool_uploadcourse_helper::resolve_category_by_idnumber('C1'));
-        $this->assertEquals($c1->id, tool_uploadcourse_helper::resolve_category_by_idnumber('C1'));
-        $this->assertEquals($c2->id, tool_uploadcourse_helper::resolve_category_by_idnumber('C2'));
-        $this->assertEquals($c2->id, tool_uploadcourse_helper::resolve_category_by_idnumber('C2'));
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_idnumber('DoesNotExist'));
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_idnumber('DoesNotExist'));
+        $this->assertEquals($c1->id, tool_bulkenrollment_helper::resolve_category_by_idnumber('C1'));
+        $this->assertEquals($c1->id, tool_bulkenrollment_helper::resolve_category_by_idnumber('C1'));
+        $this->assertEquals($c2->id, tool_bulkenrollment_helper::resolve_category_by_idnumber('C2'));
+        $this->assertEquals($c2->id, tool_bulkenrollment_helper::resolve_category_by_idnumber('C2'));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_idnumber('DoesNotExist'));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_idnumber('DoesNotExist'));
     }
 
     public function test_resolve_category_by_path() {
@@ -414,52 +414,52 @@ class helper_test extends \advanced_testcase {
 
         // Existing categories. Doubled for cache testing.
         $path = array('Cat 1');
-        $this->assertEquals($cat1->id, tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEquals($cat1->id, tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat1->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat1->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         $path = array('Cat 1', 'Cat 1.1', 'Cat 1.1.2');
-        $this->assertEquals($cat1_1_2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEquals($cat1_1_2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat1_1_2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat1_1_2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         $path = array('Cat 1', 'Cat 1.2');
-        $this->assertEquals($cat1_2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEquals($cat1_2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat1_2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat1_2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         $path = array('Cat 2');
-        $this->assertEquals($cat2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEquals($cat2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         // Hidden category.
         $path = array('Cat 2', 'Cat 2.1');
-        $this->assertEquals($cat2_1->id, tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEquals($cat2_1->id, tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat2_1->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat2_1->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         // Hidden parent.
         $path = array('Cat 2', 'Cat 2.1', 'Cat 2.1.2');
-        $this->assertEquals($cat2_1_2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEquals($cat2_1_2->id, tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat2_1_2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat2_1_2->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         // Does not exist.
         $path = array('No cat 3', 'Cat 1.2');
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         $path = array('Cat 2', 'Cat 2.x');
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         // Name conflict.
         $path = array('Cat 3', 'Cat 3.1 Doubled');
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         $path = array('Cat 3', 'Cat 3.1 Doubled', 'Cat 3.1.1');
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEmpty(tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEmpty(tool_bulkenrollment_helper::resolve_category_by_path($path));
 
         $path = array('Cat 3', 'Cat 3.1.1');
-        $this->assertEquals($cat3_fakedouble->id, tool_uploadcourse_helper::resolve_category_by_path($path));
-        $this->assertEquals($cat3_fakedouble->id, tool_uploadcourse_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat3_fakedouble->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
+        $this->assertEquals($cat3_fakedouble->id, tool_bulkenrollment_helper::resolve_category_by_path($path));
     }
 
     /**

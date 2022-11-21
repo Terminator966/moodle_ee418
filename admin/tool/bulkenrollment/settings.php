@@ -17,7 +17,7 @@
 /**
  * Link to CSV course upload.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2011 Piers Harding
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

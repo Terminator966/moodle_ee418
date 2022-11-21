@@ -17,7 +17,7 @@
 /**
  * File containing the step 1 of the upload form.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,11 +29,11 @@ require_once($CFG->libdir.'/formslib.php');
 /**
  * Upload a file CVS file with course information.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2011 Piers Harding
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_uploadcourse_step1_form extends tool_uploadcourse_base_form {
+class tool_bulkenrollment_step1_form extends tool_bulkenrollment_base_form {
 
     /**
      * The standard form definiton.
