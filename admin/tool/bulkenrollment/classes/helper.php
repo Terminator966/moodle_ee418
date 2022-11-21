@@ -36,20 +36,18 @@ require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
  */
 class tool_bulkenrollment_helper {
 
-    /**
-     * Return the enrolment plugins.
-     *
-     * The result is cached for faster execution.
-     *
-     * @return enrol_plugin[]
-     */
-    public static function get_enrolment_plugins() {
-        $cache = cache::make('tool_bulkenrollment', 'helper');
-        if (($enrol = $cache->get('enrol')) === false) {
-            $enrol = enrol_get_plugins(false);
-            $cache->set('enrol', $enrol);
+
+    public static function get_enrolment_instance($courseobject) {
+        global $DB;
+
+        $instance = $DB->get_record('enrol', array('courseid' => $courseobject, 'enrol' => 'manual'));
+        if (!empty($instance)) {
+            $plugin = enrol_get_plugin('manual');
+            $enrolid = $plugin->add_instance($courseobject);
+
+            $instance = $DB->get_record('enrol', array('id' => $enrolid, 'enrol' => 'manual'));
         }
-        return $enrol;
+        return $instance;
     }
 
     public static function resolve_user($data, &$errors = array()) {
@@ -91,7 +89,7 @@ class tool_bulkenrollment_helper {
         $courseid = $DB->get_record('course', array('id' => $data));
 
         if (!empty($courseid) && !empty($courseid->id)) {
-            $usercourseid = $courseid->id;
+            $usercourseid = $courseid;
         } else {
             $errors['couldnotresolvecatgorybyid'] =
                 new lang_string('couldnotresolvecatgorybyid', 'tool_bulkenrollment');
