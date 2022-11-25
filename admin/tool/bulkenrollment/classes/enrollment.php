@@ -33,7 +33,7 @@ require_once($CFG->dirroot . '/course/lib.php');
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_bulkenrollment_course {
+class tool_bulkenrollment_enrollment {
 
     /** @var array final import data. */
     protected $data = array();
@@ -149,7 +149,7 @@ class tool_bulkenrollment_course {
      * @return bool false is any error occured.
      */
     public function prepare() { //convert rawdata to enrollment object
-        global $DB, $SITE, $CFG;
+        global $DB;
 
         $this->prepared = true;
 
@@ -171,7 +171,7 @@ class tool_bulkenrollment_course {
                 $errors[] = $field;
             }
         }
-        if (!empty($errors)) {
+        if (!empty($errors)) {//TODO: updte message
             $this->error('missingmandatoryfields', new lang_string('missingmandatoryfields', 'tool_bulkenrollment',
                 implode(', ', $errors)));
             return false;
@@ -188,7 +188,7 @@ class tool_bulkenrollment_course {
             $enrollmentdata['courseid'] = $courseobject->id;
             $enrollmentdata['roleid'] = $roleid;
         } else {
-            foreach ($errors as $key => $message) { //dispay errors (check error strigs)
+            foreach ($errors as $key => $message) { //display errors (check error strigs)
                 $this->error($key, $message);
             }
             return false;
@@ -197,7 +197,12 @@ class tool_bulkenrollment_course {
         // Saving data.
         $this->data = $enrollmentdata;
         $instance = tool_bulkenrollment_helper::get_enrolment_instance($courseobject);
-        $userenrolment = D
+        $userenrollment = $DB->get_record('user_enrolments', array('enrolid' => $instance->id, 'userid' => $userid));
+        if ($userenrollment) {
+            $this->error('missingmandatoryfields', "Enrollment exists"); //TODO: later chager error strings
+            return false;
+        }
+
         return true;
     }
 

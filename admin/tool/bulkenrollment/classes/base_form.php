@@ -54,6 +54,14 @@ class tool_bulkenrollment_base_form extends moodleform {
         $mform->addElement('header', 'importoptionshdr', get_string('importoptions', 'tool_bulkenrollment'));
         $mform->setExpanded('importoptionshdr', true);
 
+
+
+        $choices = array(
+            1 => "YES",
+            0 => "NO"
+        );
+        $mform->addElement('select', 'options[mode]', get_string('mode', 'tool_bulkenrollment'), $choices);
+        $mform->addHelpButton('options[mode]', 'mode', 'tool_bulkenrollment');
         
     }
 

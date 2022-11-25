@@ -96,11 +96,8 @@ if ($form2data = $mform2->is_cancelled()) {
         $options = $form1data->options;
     } else if ($submitteddata = $mform2->get_submitted_data()) {
         $options = (array)$submitteddata->options;
-    } else {
-        // Weird but we still need to provide a value, setting the default step1_form one.
-        $options = array('mode' => tool_bulkenrollment_tracker::MODE_CREATE_NEW);
     }
-    $processor = new tool_bulkenrollment_tracker($cir, $options);
+    $processor = new tool_bulkenrollment_processor($cir, $options);
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('bulkenrollmentspreview', 'tool_bulkenrollment'));
     $processor->preview($previewrows, new tool_bulkenrollment_tracker(tool_bulkenrollment_tracker::OUTPUT_HTML));

@@ -132,7 +132,7 @@ class tool_bulkenrollment_processor {
      * @return tool_bulkenrollment_course
      */
     protected function get_enrollment($data) {
-        return new tool_bulkenrollment_course($this->$data, $this->options); //calling enrollment.php to create enrollment object and do enrollment
+        return new tool_bulkenrollment_enrollment($this->$data, $this->options); //calling enrollment.php to create enrollment object and do enrollment
     }
 
     /**

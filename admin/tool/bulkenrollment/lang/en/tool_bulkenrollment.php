@@ -44,7 +44,6 @@ $string['canonlyresetcourseinupdatemode'] = 'Can only reset a course in update m
 $string['couldnotresolveusernamebyid'] = 'Could not resolve username by ID';
 $string['couldnotresolvecatgorybysname'] = 'Could not resolve category by ID';
 $string['couldnotresolvecatgorybycourse'] = 'Could not resolve category by ID';
-
 $string['couldnotresolvecatgorybyidnumber'] = 'Could not resolve category by ID number';
 $string['couldnotresolvecatgorybypath'] = 'Could not resolve category by path';
 $string['coursecreated'] = 'Course created';
@@ -133,12 +132,13 @@ $string['updateonly'] = 'Only update existing students';
 $string['updatewithdataordefaults'] = 'Update with CSV data and defaults';
 $string['updatewithdataonly'] = 'Update with CSV data only';
 $string['bulkenrollment'] = 'Bulk Enrollment Feature';
-$string['bulkenrollment_help'] = 'students may be uploaded via text file. The format of the file should be as follows:
+$string['bulkenrollments'] = 'Bulk Enrollment Feature';
+$string['bulkenrollments_help'] = 'students may be uploaded via text file. The format of the file should be as follows:
 
 * Each line of the file contains one record
 * Each record is a series of data separated by the selected separator
 * The first record contains a list of fieldnames defining the format of the rest of the file
 * Required fieldnames are shortname, fullname, and category';
-$string['bulkenrollmentpreview'] = 'Bulk Enrollment preview';
+$string['bulkenrollmentspreview'] = 'Bulk Enrollment preview';
 $string['bulkenrollmentresult'] = 'Bulk Enrollment results';
 $string['privacy:metadata'] = 'The Bulk Enrollment plugin does not store any personal data.';
