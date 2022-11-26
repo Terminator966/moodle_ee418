@@ -151,5 +151,5 @@ $string['bulkenrollment_help'] = 'Course administrators may upload csv files for
 * The first column is "sname" which contains the name of those who should be enrolled in the given course
 * The second column is "id" which contains the ID of the course intended to be enrolled to (as identified in the database)
 * The third and final column is "role" which identifies the role to be assigned to each person
-* Available roles include: Student, Teacher, Non-editing teacher, and Manager';
+* Available roles include: Student, Teacher, and Manager';
 $string['privacy:metadata'] = 'The Bulk Enrollment plugin does not store any personal data.';

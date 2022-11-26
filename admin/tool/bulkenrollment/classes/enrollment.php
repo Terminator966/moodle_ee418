@@ -200,7 +200,7 @@ class tool_bulkenrollment_enrollment {
         // Saving data.
         $this->data = $enrollmentdata;
         $instance = tool_bulkenrollment_helper::get_enrolment_instance($courseobject);
-        $userenrollment = $DB->get_record('user_enrolments', array('enrolid' => $instance->id, 'userid' => $userid));
+        $userenrollment = $DB->get_record('user_enrolments', array('enrolid' => $courseobject->id, 'userid' => $userid));
         if ($userenrollment) {
             $this->error('missingmandatoryfields', "Enrollment exists"); //TODO: later chager error strings
             return false;
@@ -210,15 +210,24 @@ class tool_bulkenrollment_enrollment {
     }
 
     /**
+     * Return whether there were errors with this enrol.
+     *
+     * @return boolean
+     */
+    public function has_errors() {
+        return !empty($this->errors);
+    }
+
+    /**
      * Proceed with the import of the course.
      *
      * @return void
      */
     public function proceed() {
-        global $CFG, $USER;
+        global $DB;
 
         if (!$this->prepared) {
-            throw new coding_exception('The course has not been prepared.');
+            throw new coding_exception('The enrol action has not been prepared.');
         } else if ($this->has_errors()) {
             throw new moodle_exception('Cannot proceed, errors were detected.');
         } else if ($this->processstarted) {
@@ -228,7 +237,7 @@ class tool_bulkenrollment_enrollment {
 
 
         $course = $DB->get_record('course', array('id' => $this->data['courseid']));
-        $instance = $this->get_enrol_instance($course);
+        $instance = enrol_get_instances($course->id,false);
 
         // Take care of timestart/timeend in course settings.
         $timestart = time();

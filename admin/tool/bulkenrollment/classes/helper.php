@@ -40,7 +40,7 @@ class tool_bulkenrollment_helper {
     public static function get_enrolment_instance($courseobject) {
         global $DB;
 
-        $instance = $DB->get_record('enrol', array('courseid' => $courseobject, 'enrol' => 'manual'));
+        $instance = $DB->get_record('enrol', array('courseid' => $courseobject->id, 'enrol' => 'manual'));
         if (!empty($instance)) {
             $plugin = enrol_get_plugin('manual');
             $enrolid = $plugin->add_instance($courseobject);
@@ -86,7 +86,7 @@ class tool_bulkenrollment_helper {
         $usercourseid = null;
         global $DB;
 
-        $courseid = $DB->get_record('course', array('idnumber' => $data));
+        $courseid = $DB->get_record('course', array('id' => $data));
 
         if (!empty($courseid) && !empty($courseid->id)) {
             $usercourseid = $courseid;
