@@ -48,7 +48,7 @@ if (empty($importid)) {
         }
     } else {
         echo $OUTPUT->header();
-        echo $OUTPUT->heading_with_help(get_string('bulkenrollments', 'tool_bulkenrollment'), 'bulkenrollments', 'tool_bulkenrollment');
+        echo $OUTPUT->heading_with_help(get_string('bulkenrollment', 'tool_bulkenrollment'), 'bulkenrollment', 'tool_bulkenrollment');
         $mform1->display();
         echo $OUTPUT->footer();
         die();
@@ -82,7 +82,7 @@ if ($form2data = $mform2->is_cancelled()) {
 
     echo $OUTPUT->header();
     if (isset($form2data->showpreview)) {
-        echo $OUTPUT->heading(get_string('bulkenrollmentspreview', 'tool_bulkenrollment'));
+        echo $OUTPUT->heading(get_string('bulkenrollmentpreview', 'tool_bulkenrollment'));
         $processor->preview($previewrows, new tool_bulkenrollment_tracker(tool_bulkenrollment_tracker::OUTPUT_HTML));
         $mform2->display();
     } else {
@@ -99,7 +99,7 @@ if ($form2data = $mform2->is_cancelled()) {
     }
     $processor = new tool_bulkenrollment_processor($cir, $options);
     echo $OUTPUT->header();
-    echo $OUTPUT->heading(get_string('bulkenrollmentspreview', 'tool_bulkenrollment'));
+    echo $OUTPUT->heading(get_string('bulkenrollmentpreview', 'tool_bulkenrollment'));
     $processor->preview($previewrows, new tool_bulkenrollment_tracker(tool_bulkenrollment_tracker::OUTPUT_HTML));
     $mform2->display();
 }

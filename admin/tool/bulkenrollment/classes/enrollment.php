@@ -54,6 +54,9 @@ class tool_bulkenrollment_enrollment {
     protected $rawdata = array();
 
     /** @var array errors. */
+    protected $errors = array();
+
+    /** @var array errors. */
     protected $statuses = array();
 
     /** @var array fields allowed as enrollment data. */
@@ -166,12 +169,12 @@ class tool_bulkenrollment_enrollment {
         // Mandatory fields upon creation.
         $errors = array();
         foreach (self::$mandatoryfields as $field) {
-            if ((!isset($coursedata[$field]) || $coursedata[$field] === '') &&
+            if ((!isset($enrollmentdata[$field]) || $enrollmentdata[$field] === '') &&
                 (!isset($this->defaults[$field]) || $this->defaults[$field] === '')) {
-                $errors[] = $field;
+                $errors[] = [$field];
             }
         }
-        if (!empty($errors)) {//TODO: updte message
+        if (!empty($errors)) {//TODO: update message
             $this->error('missingmandatoryfields', new lang_string('missingmandatoryfields', 'tool_bulkenrollment',
                 implode(', ', $errors)));
             return false;
@@ -223,13 +226,24 @@ class tool_bulkenrollment_enrollment {
         }
         $this->processstarted = true;
 
-        $course = create_course((object) $this->data);
-        $this->id = $course->id;
-        $this->status('coursecreated', new lang_string('coursecreated', 'tool_bulkenrollment'));
 
-        // Mark context as dirty.
-        $context = context_course::instance($course->id);
-        $context->mark_dirty();
+        $course = $DB->get_record('course', array('id' => $this->data['courseid']));
+        $instance = $this->get_enrol_instance($course);
+
+        // Take care of timestart/timeend in course settings.
+        $timestart = time();
+        // Remove time part from the timestamp and keep only the date part.
+        $timestart = make_timestamp(date('Y', $timestart), date('m', $timestart), date('d', $timestart), 0, 0, 0);
+        if ($instance->enrolperiod) {
+            $timeend = $timestart + $instance->enrolperiod;
+        } else {
+            $timeend = 0;
+        }
+        // Enrol the user with this plugin instance (unfortunately return void, no more status).
+        $plugin = enrol_get_plugin('manual');
+        $plugin->enrol_user($instance, $this->data['userid'], $this->data['roleid'], $timestart, $timeend);
+
+        $this->status('enrollmentcreated', new lang_string('enrollmentcreated', 'tool_bulkenrollment'));
     }
 
     /**

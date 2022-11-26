@@ -206,9 +206,9 @@ class tool_bulkenrollment_tracker {
             echo html_writer::tag('th', get_string('result', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
            // echo html_writer::tag('th', get_string('id', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
            // echo html_writer::tag('th', get_string('shortname'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('sname'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('id'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('role'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('sname', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('id', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('role', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
             echo html_writer::end_tag('tr');
         }
     }

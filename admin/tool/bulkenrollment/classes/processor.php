@@ -129,10 +129,10 @@ class tool_bulkenrollment_processor {
      * Return a course import object.
      *
      * @param array $data data to import the course with.
-     * @return tool_bulkenrollment_course
+     * @return tool_bulkenrollment_enrollment
      */
     protected function get_enrollment($data) {
-        return new tool_bulkenrollment_enrollment($this->$data, $this->options); //calling enrollment.php to create enrollment object and do enrollment
+        return new tool_bulkenrollment_enrollment($data, $this->options); //calling enrollment.php to create enrollment object and do enrollment
     }
 
     /**

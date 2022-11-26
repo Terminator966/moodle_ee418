@@ -59,8 +59,8 @@ class tool_bulkenrollment_helper {
         if (!empty($user) && !empty($user->id)) {
             $userid = $user->id;
         } else {
-            $errors['couldnotresolvecatgorybyid'] =
-                new lang_string('couldnotresolvecatgorybyid', 'tool_bulkenrollment');
+            $errors['couldnotresolveusernamebyid'] =
+                new lang_string('couldnotresolveusernamebyid', 'tool_bulkenrollment');
         }
 
         return $userid;
@@ -75,8 +75,8 @@ class tool_bulkenrollment_helper {
         if (!empty($role) && !empty($role->id)) {
             $userrole = $role->id;
         } else {
-            $errors['couldnotresolvecatgorybyid'] =
-                new lang_string('couldnotresolvecatgorybyid', 'tool_bulkenrollment');
+            $errors['couldnotresolverolebyid'] =
+                new lang_string('couldnotresolverolebyid', 'tool_bulkenrollment');
         }
 
         return $userrole; //id of role
@@ -86,13 +86,13 @@ class tool_bulkenrollment_helper {
         $usercourseid = null;
         global $DB;
 
-        $courseid = $DB->get_record('course', array('id' => $data));
+        $courseid = $DB->get_record('course', array('idnumber' => $data));
 
         if (!empty($courseid) && !empty($courseid->id)) {
             $usercourseid = $courseid;
         } else {
-            $errors['couldnotresolvecatgorybyid'] =
-                new lang_string('couldnotresolvecatgorybyid', 'tool_bulkenrollment');
+            $errors['couldnotresolvecoursebyid'] =
+                new lang_string('couldnotresolvecoursebyid', 'tool_bulkenrollment');
         }
 
         return $usercourseid; //id of course

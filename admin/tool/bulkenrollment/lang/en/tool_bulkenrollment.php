@@ -42,6 +42,8 @@ $string['canonlyresetcourseinupdatemode'] = 'Can only reset a course in update m
 //TODO; EDIT later
 //!!!!!!!!
 $string['couldnotresolveusernamebyid'] = 'Could not resolve username by ID';
+$string['couldnotresolverolebyid'] = 'Could not resolve role by ID';
+$string['couldnotresolvecoursebyid'] = 'Could not resolve course by ID';
 $string['couldnotresolvecatgorybysname'] = 'Could not resolve category by ID';
 $string['couldnotresolvecatgorybycourse'] = 'Could not resolve category by ID';
 $string['couldnotresolvecatgorybyidnumber'] = 'Could not resolve category by ID number';
@@ -88,6 +90,7 @@ $string['errorcannotdeleteenrolment'] = 'Cannot delete enrolment method \'{$a}\'
 $string['errorcannotdisableenrolment'] = 'Cannot disable enrolment method \'{$a}\'';
 $string['errorwhilerestoringcourse'] = 'Error while restoring the course';
 $string['errorwhiledeletingcourse'] = 'Error while deleting the course';
+$string['enrollmentcreated'] = 'Enrollment has been created';
 $string['generatedshortnameinvalid'] = 'The generated shortname is invalid';
 $string['generatedshortnamealreadyinuse'] = 'The generated shortname is already in use';
 $string['id'] = 'ID';
@@ -133,12 +136,20 @@ $string['updatewithdataordefaults'] = 'Update with CSV data and defaults';
 $string['updatewithdataonly'] = 'Update with CSV data only';
 $string['bulkenrollment'] = 'Bulk Enrollment Feature';
 $string['bulkenrollments'] = 'Bulk Enrollment Feature';
-$string['bulkenrollments_help'] = 'students may be uploaded via text file. The format of the file should be as follows:
+$string['bulkenrollmentpreview'] = 'Bulk Enrollment preview';
+$string['bulkenrollmentsresult'] = 'Bulk Enrollment results';
+$string['sname'] = 'Name';
+$string['id'] = 'ID';
+$string['role'] = 'Role';
+$string['coursestotal'] = 'Total Courses: ';
+$string['coursescreated'] = 'Courses Created: ';
+$string['courseserrors'] = 'Course Errors: ';
+$string['bulkenrollment_help'] = 'Course administrators may upload csv files for bulk enrollment. The format of the file should be as follows:
 
 * Each line of the file contains one record
 * Each record is a series of data separated by the selected separator
-* The first record contains a list of fieldnames defining the format of the rest of the file
-* Required fieldnames are shortname, fullname, and category';
-$string['bulkenrollmentspreview'] = 'Bulk Enrollment preview';
-$string['bulkenrollmentresult'] = 'Bulk Enrollment results';
+* The first column is "sname" which contains the name of those who should be enrolled in the given course
+* The second column is "id" which contains the ID of the course intended to be enrolled to (as identified in the database)
+* The third and final column is "role" which identifies the role to be assigned to each person
+* Available roles include: Student, Teacher, Non-editing teacher, and Manager';
 $string['privacy:metadata'] = 'The Bulk Enrollment plugin does not store any personal data.';
