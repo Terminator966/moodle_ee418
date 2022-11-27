@@ -41,7 +41,7 @@ class tool_bulkenrollment_helper {
         global $DB;
 
         $instance = $DB->get_record('enrol', array('courseid' => $courseobject->id, 'enrol' => 'manual'));
-        if (!empty($instance)) {
+        if (empty($instance)) {
             $plugin = enrol_get_plugin('manual');
             $enrolid = $plugin->add_instance($courseobject);
 
@@ -83,18 +83,15 @@ class tool_bulkenrollment_helper {
     }
 
     public static function resolve_course($data, &$errors = array()) {
-        $usercourseid = null;
         global $DB;
 
-        $courseid = $DB->get_record('course', array('id' => $data));
+        $course = $DB->get_record('course', array('id' => $data));
 
-        if (!empty($courseid) && !empty($courseid->id)) {
-            $usercourseid = $courseid;
-        } else {
+        if (empty($course)) {
             $errors['couldnotresolvecoursebyid'] =
                 new lang_string('couldnotresolvecoursebyid', 'tool_bulkenrollment');
         }
 
-        return $usercourseid; //id of course
+        return $course; //course objecr
     }
 }

@@ -144,6 +144,7 @@ $string['role'] = 'Role';
 $string['coursestotal'] = 'Total Courses: ';
 $string['coursescreated'] = 'Courses Created: ';
 $string['courseserrors'] = 'Course Errors: ';
+$string['enrollmentexists'] = 'Enrolment for this user already exists in the course ';
 $string['bulkenrollment_help'] = 'Course administrators may upload csv files for bulk enrollment. The format of the file should be as follows:
 
 * Each line of the file contains one record

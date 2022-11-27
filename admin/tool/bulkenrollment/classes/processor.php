@@ -109,7 +109,7 @@ class tool_bulkenrollment_processor {
                     $created++;
                 }
 
-                $data = array_merge($data, $enrollment->get_data(), array('id' => $enrollment->get_id()));
+                $data = array_merge($data, $enrollment->get_data());
                 $tracker->output($this->linenb, true, $status, $data);
                 if ($enrollment->has_errors()) {
                     $errors++;

@@ -200,9 +200,9 @@ class tool_bulkenrollment_enrollment {
         // Saving data.
         $this->data = $enrollmentdata;
         $instance = tool_bulkenrollment_helper::get_enrolment_instance($courseobject);
-        $userenrollment = $DB->get_record('user_enrolments', array('enrolid' => $courseobject->id, 'userid' => $userid));
+        $userenrollment = $DB->get_record('user_enrolments', array('enrolid' => $instance->id, 'userid' => $userid));
         if ($userenrollment) {
-            $this->error('missingmandatoryfields', "Enrollment exists"); //TODO: later chager error strings
+            $this->error('enrollmentexists', new lang_string('enrollmentexists', 'tool_bulkenrollment'));
             return false;
         }
 
@@ -237,17 +237,15 @@ class tool_bulkenrollment_enrollment {
 
 
         $course = $DB->get_record('course', array('id' => $this->data['courseid']));
-        $instance = enrol_get_instances($course->id,false);
+        $instance = tool_bulkenrollment_helper::get_enrolment_instance($course);
 
         // Take care of timestart/timeend in course settings.
         $timestart = time();
         // Remove time part from the timestamp and keep only the date part.
         $timestart = make_timestamp(date('Y', $timestart), date('m', $timestart), date('d', $timestart), 0, 0, 0);
-        if ($instance->enrolperiod) {
-            $timeend = $timestart + $instance->enrolperiod;
-        } else {
-            $timeend = 0;
-        }
+
+        $timeend = 0;
+
         // Enrol the user with this plugin instance (unfortunately return void, no more status).
         $plugin = enrol_get_plugin('manual');
         $plugin->enrol_user($instance, $this->data['userid'], $this->data['roleid'], $timestart, $timeend);
