@@ -52,7 +52,7 @@ class tool_bulkenrollment_tracker {
     /**
      * @var array columns to display.
      */
-    protected $columns = array('line', 'result', 'sname', 'id', 'role');
+    protected $columns = array('line', 'result', 'student_name', 'class_id', 'role');
 
     /**
      * @var int row number.
@@ -97,38 +97,6 @@ class tool_bulkenrollment_tracker {
     }
 
     /**
-     * Output the results.
-     *
-     * @param int $total total courses.
-     * @param int $created count of courses created.
-     * @param int $errors count of errors.
-     * @return void
-     */
-    public function results($total, $created, $errors) {
-        if ($this->outputmode == self::NO_OUTPUT) {
-            return;
-        }
-
-        $message = array(
-            get_string('coursestotal', 'tool_bulkenrollment', $total),
-            get_string('coursescreated', 'tool_bulkenrollment', $created),
-            get_string('courseserrors', 'tool_bulkenrollment', $errors)
-        );
-
-        if ($this->outputmode == self::OUTPUT_PLAIN) {
-            foreach ($message as $msg) {
-                $this->buffer->output($msg);
-            }
-        } else if ($this->outputmode == self::OUTPUT_HTML) {
-            $buffer = new progress_trace_buffer(new html_list_progress_trace());
-            foreach ($message as $msg) {
-                $buffer->output($msg);
-            }
-            $buffer->finished();
-        }
-    }
-
-    /**
      * Output one more line.
      *
      * @param int $line line number.
@@ -148,8 +116,8 @@ class tool_bulkenrollment_tracker {
                 $line,
                 $outcome ? 'OK' : 'NOK',
                 //isset($data['id']) ? $data['id'] : '',
-                isset($data['sname']) ? $data['sname'] : '',
-                isset($data['id']) ? $data['id'] : '',
+                isset($data['student_name']) ? $data['student_name'] : '',
+                isset($data['class_id']) ? $data['class id'] : '',
                 isset($data['role']) ? $data['role'] : ''
             );
             $this->buffer->output(implode("\t", $message));
@@ -173,8 +141,8 @@ class tool_bulkenrollment_tracker {
             echo html_writer::tag('td', $line, array('class' => 'c' . $ci++));
             echo html_writer::tag('td', $outcome, array('class' => 'c' . $ci++));
             //echo html_writer::tag('td', isset($data['id']) ? $data['id'] : '', array('class' => 'c' . $ci++));
-            echo html_writer::tag('td', isset($data['sname']) ? $data['sname'] : '', array('class' => 'c' . $ci++));
-            echo html_writer::tag('td', isset($data['id']) ? $data['id'] : '', array('class' => 'c' . $ci++));
+            echo html_writer::tag('td', isset($data['student_name']) ? $data['student_name'] : '', array('class' => 'c' . $ci++));
+            echo html_writer::tag('td', isset($data['class_id']) ? $data['class_id'] : '', array('class' => 'c' . $ci++));
             echo html_writer::tag('td', isset($data['role']) ? $data['role'] : '', array('class' => 'c' . $ci++));
             echo html_writer::tag('td', $status, array('class' => 'c' . $ci++));
             echo html_writer::end_tag('tr');
@@ -206,8 +174,8 @@ class tool_bulkenrollment_tracker {
             echo html_writer::tag('th', get_string('result', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
            // echo html_writer::tag('th', get_string('id', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
            // echo html_writer::tag('th', get_string('shortname'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('sname', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
-            echo html_writer::tag('th', get_string('id', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('student_name', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
+            echo html_writer::tag('th', get_string('class_id', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
             echo html_writer::tag('th', get_string('role', 'tool_bulkenrollment'), array('class' => 'c' . $ci++, 'scope' => 'col'));
             echo html_writer::end_tag('tr');
         }

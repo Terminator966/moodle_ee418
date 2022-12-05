@@ -55,6 +55,7 @@ class tool_bulkenrollment_processor {
     /** @var bool whether the process has been started or not. */
     protected $processstarted = false;
 
+
     /**
      * Constructor
      *
@@ -100,8 +101,8 @@ class tool_bulkenrollment_processor {
             $total++;
 
             $data = $this->parse_line($line); //array that contains csv data
-            $enrollment = $this->get_enrollment($data); //array to enrol pbject
-            if ($enrollment->prepare()) { //prepare make it possiable to view, procesed does enrollment
+            $enrollment = $this->get_enrollment($data); //array to enrol object
+            if ($enrollment->prepare(options)) { //prepare make it possiable to view, procesed does enrollment
                 $enrollment->proceed();
 
                 $status = $enrollment->get_statuses();
@@ -122,7 +123,6 @@ class tool_bulkenrollment_processor {
         }
 
         $tracker->finish();
-        $tracker->results($total, $created, $errors);
     }
 
     /**
@@ -213,7 +213,7 @@ class tool_bulkenrollment_processor {
             $this->linenb++;
             $data = $this->parse_line($line);
             $course = $this->get_enrollment($data);
-            $result = $course->prepare();
+            $result = $course->prepare($this->options);
             if (!$result) {
                 $tracker->output($this->linenb, $result, $course->get_errors(), $data);
             } else {

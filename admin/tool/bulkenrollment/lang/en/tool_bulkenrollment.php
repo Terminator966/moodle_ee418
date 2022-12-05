@@ -41,9 +41,9 @@ $string['canonlyrenameinupdatemode'] = 'Can only rename a course when update is 
 $string['canonlyresetcourseinupdatemode'] = 'Can only reset a course in update mode';
 //TODO; EDIT later
 //!!!!!!!!
-$string['couldnotresolveusernamebyid'] = 'Could not resolve username by ID';
-$string['couldnotresolverolebyid'] = 'Could not resolve role by ID';
-$string['couldnotresolvecoursebyid'] = 'Could not resolve course by ID';
+$string['couldnotresolveusernamebyid'] = 'Could not resolve username provided';
+$string['couldnotresolverolebyid'] = 'Could not resolve role provided';
+$string['couldnotresolvecoursebyid'] = 'Could not resolve course provided';
 $string['couldnotresolvecatgorybysname'] = 'Could not resolve category by ID';
 $string['couldnotresolvecatgorybycourse'] = 'Could not resolve category by ID';
 $string['couldnotresolvecatgorybyidnumber'] = 'Could not resolve category by ID number';
@@ -91,6 +91,7 @@ $string['errorcannotdisableenrolment'] = 'Cannot disable enrolment method \'{$a}
 $string['errorwhilerestoringcourse'] = 'Error while restoring the course';
 $string['errorwhiledeletingcourse'] = 'Error while deleting the course';
 $string['enrollmentcreated'] = 'Enrollment has been created';
+$string['enrollmentexists'] = 'Enrollment already exists';
 $string['generatedshortnameinvalid'] = 'The generated shortname is invalid';
 $string['generatedshortnamealreadyinuse'] = 'The generated shortname is already in use';
 $string['id'] = 'ID';
@@ -110,8 +111,12 @@ $string['invalidfullnametoolong'] = 'The fullname field is limited to {$a} chara
 $string['invalidshortnametoolong'] = 'The shortname field is limited to {$a} characters';
 $string['missingmandatoryfields'] = 'Missing value for mandatory fields: {$a}';
 $string['missingshortnamenotemplate'] = 'Missing shortname and shortname template not set';
-$string['mode'] = 'Upload mode';
-$string['mode_help'] = 'This allows you to specify if students can be created and/or updated.';
+$string['resolveuserby'] = 'Resolve User By';
+$string['resolveclassby'] = 'Resolve Course By';
+$string['resolveroleby'] = 'Resolve Role By';
+$string['resolveuserby_help'] = 'This allows you to specify how the user column should be resolved.';
+$string['resolveclassby_help'] = 'This allows you to specify how the course column should be resolved.';
+$string['resolveroleby_help'] = 'This allows you to specify how the role column should be resolved.';
 $string['nochanges'] = 'No changes';
 $string['pluginname'] = 'Course upload';
 $string['preview'] = 'Preview';
@@ -135,11 +140,11 @@ $string['updateonly'] = 'Only update existing students';
 $string['updatewithdataordefaults'] = 'Update with CSV data and defaults';
 $string['updatewithdataonly'] = 'Update with CSV data only';
 $string['bulkenrollment'] = 'Bulk Enrollment Feature';
-$string['bulkenrollments'] = 'Bulk Enrollment Feature';
+$string['bulkenrollments'] = 'Continue With Enrollment';
 $string['bulkenrollmentpreview'] = 'Bulk Enrollment preview';
 $string['bulkenrollmentsresult'] = 'Bulk Enrollment results';
-$string['sname'] = 'Name';
-$string['id'] = 'ID';
+$string['student_name'] = 'Name';
+$string['class_id'] = 'ID';
 $string['role'] = 'Role';
 $string['coursestotal'] = 'Total Courses: ';
 $string['coursescreated'] = 'Courses Created: ';
@@ -149,8 +154,8 @@ $string['bulkenrollment_help'] = 'Course administrators may upload csv files for
 
 * Each line of the file contains one record
 * Each record is a series of data separated by the selected separator
-* The first column is "sname" which contains the name of those who should be enrolled in the given course
-* The second column is "id" which contains the ID of the course intended to be enrolled to (as identified in the database)
+* The first column is "student_name" which contains the name of those who should be enrolled in the given course
+* The second column is "class_id" which contains the ID of the course intended to be enrolled to (as identified in the database)
 * The third and final column is "role" which identifies the role to be assigned to each person
 * Available roles include: Student, Teacher, and Manager';
 $string['privacy:metadata'] = 'The Bulk Enrollment plugin does not store any personal data.';

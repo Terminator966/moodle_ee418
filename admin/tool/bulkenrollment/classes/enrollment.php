@@ -60,10 +60,10 @@ class tool_bulkenrollment_enrollment {
     protected $statuses = array();
 
     /** @var array fields allowed as enrollment data. */
-    static protected $validfields = array('sname', 'id', 'role'); //what must go in the dtb
+    static protected $validfields = array('student_name', 'class_id', 'role'); //what must go in the dtb
 
     /** @var array fields required on course creation. */
-    static protected $mandatoryfields = array('sname', 'id', 'role');
+    static protected $mandatoryfields = array('student_name', 'class_id', 'role');
 
     /**
      * Constructor
@@ -151,11 +151,11 @@ class tool_bulkenrollment_enrollment {
      *
      * @return bool false is any error occured.
      */
-    public function prepare() { //convert rawdata to enrollment object
+    public function prepare(array $options) { //convert rawdata to enrollment object
         global $DB;
 
         $this->prepared = true;
-
+        $this->options = $options;
 
         // Basic data.
         $enrollmentdata = array();
@@ -183,9 +183,9 @@ class tool_bulkenrollment_enrollment {
 
         // Resolve the category, and fail if not found.
         $errors = array();
-        $userid = tool_bulkenrollment_helper::resolve_user($this->rawdata['sname'], $errors); //does course exist (check id?)
-        $courseobject = tool_bulkenrollment_helper::resolve_course($this->rawdata['id'], $errors);
-        $roleid = tool_bulkenrollment_helper::resolve_role($this->rawdata['role'], $errors);
+        $userid = tool_bulkenrollment_helper::resolve_user($this->rawdata['student_name'], $errors, $options); //does course exist (check id?)
+        $courseobject = tool_bulkenrollment_helper::resolve_course($this->rawdata['class_id'], $errors, $options);
+        $roleid = tool_bulkenrollment_helper::resolve_role($this->rawdata['role'], $errors, $options);
         if (empty($errors)) {
             $enrollmentdata['userid'] = $userid;
             $enrollmentdata['courseid'] = $courseobject->id;

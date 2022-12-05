@@ -55,7 +55,7 @@ class tool_bulkenrollment_step2_form extends tool_bulkenrollment_base_form {
         $mform->addElement('hidden', 'previewrows');
         $mform->setType('previewrows', PARAM_INT);
 
-        $this->add_action_buttons(true, get_string('bulkenrollment', 'tool_bulkenrollment'));
+        $this->add_action_buttons(true, get_string('bulkenrollments', 'tool_bulkenrollment'));
 
         $this->set_data($data);
     }

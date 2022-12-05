@@ -57,12 +57,25 @@ class tool_bulkenrollment_base_form extends moodleform {
 
 
         $choices = array(
-            1 => "YES",
-            0 => "NO"
+            tool_bulkenrollment_helper::RESOLVE_USER_USERNAME =>"Username",
+            tool_bulkenrollment_helper::RESOLVE_USER_EMAIL => "Email"
         );
-        $mform->addElement('select', 'options[mode]', get_string('mode', 'tool_bulkenrollment'), $choices);
-        $mform->addHelpButton('options[mode]', 'mode', 'tool_bulkenrollment');
-        
+        $mform->addElement('select', 'options[resolveuserby]', get_string('resolveuserby', 'tool_bulkenrollment'), $choices);
+        $mform->addHelpButton('options[resolveuserby]', 'resolveuserby', 'tool_bulkenrollment');
+
+        $choices = array(
+            tool_bulkenrollment_helper::RESOLVE_COURSE_ID => "Class ID",
+            tool_bulkenrollment_helper::RESOLVE_COURSE_SHORTNAME => "Class Shortname"
+        );
+        $mform->addElement('select', 'options[resolveclassby]', get_string('resolveclassby', 'tool_bulkenrollment'), $choices);
+        $mform->addHelpButton('options[resolveclassby]', 'resolveclassby', 'tool_bulkenrollment');
+
+        $choices = array(
+            tool_bulkenrollment_helper::RESOLVE_ROLE_SHORTNAME => "Role Shortname",
+            tool_bulkenrollment_helper::RESOLVE_ROLE_ID => "Role ID"
+        );
+        $mform->addElement('select', 'options[resolveroleby]', get_string('resolveroleby', 'tool_bulkenrollment'), $choices);
+        $mform->addHelpButton('options[resolveroleby]', 'resolveroleby', 'tool_bulkenrollment');
     }
 
 }

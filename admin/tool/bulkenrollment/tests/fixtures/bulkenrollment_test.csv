@@ -1,4 +1,4 @@
-sname,id,role
+student_name,class_id,role
 guest,2,Student
 admin,2,Student
 ingerowskijo,2,Manager
