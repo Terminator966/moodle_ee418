@@ -70,7 +70,7 @@ class tool_uploadcourse_base_form extends moodleform {
                 get_string('updatewithdataordefaults', 'tool_uploadcourse'),
             tool_uploadcourse_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS => get_string('updatemissing', 'tool_uploadcourse')
         );
-        $mform->addElement('select', 'options[updatemode]', get_string('updatemode', 'tool_uploadcourse'), $choices);
+        $mform->addElement('select', 'options[updatemode]', get_string('updatemode', 'tool_uploadcourse'), );
         $mform->setDefault('options[updatemode]', tool_uploadcourse_processor::UPDATE_NOTHING);
         $mform->hideIf('options[updatemode]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_NEW);
         $mform->hideIf('options[updatemode]', 'options[mode]', 'eq', tool_uploadcourse_processor::MODE_CREATE_ALL);

@@ -31,6 +31,12 @@ require_once $CFG->libdir.'/formslib.php';
 class edit_calculation_form extends moodleform {
     public $available;
     public $noidnumbers;
+    public $selection;
+
+    const SUM_SELECTION = 1;
+    const SUM_WEIGHTED_SELECTION = 3;
+    const AVG_SELECTION = 2;
+    const AVG_WEIGHTED_SELECTION = 4;
 
     function definition() {
         global $COURSE;
@@ -40,7 +46,12 @@ class edit_calculation_form extends moodleform {
         $itemid = $this->_customdata['itemid'];
 
         $this->available = grade_item::fetch_all(array('courseid'=>$COURSE->id));
+        $grading_choices = array();
+//        $this->grading_choices = $grading_choices;
+        $this->grading_choice = grade_item::fetch_all(array('selection'=>$grading_choices));
         $this->noidnumbers = array();
+        $this->sum = 0;
+        $this->weight = 1;
 
         // All items that have no idnumbers are added to a separate section of the form (hidden by default),
         // enabling the user to assign idnumbers to these grade_items.
@@ -52,11 +63,32 @@ class edit_calculation_form extends moodleform {
             if ($item->id == $itemid) { // Do not include the current grade_item in the available section
                 unset($this->available[$item->id]);
             }
+//
+//            $sum += $item;
+//            $weightedSum += ($weightedSum*$item);
         }
 
+        $this->sum = "sum";
+        $this->weightedSum = "avg";
+//        $this->avg = $this->sum/count($this->available);
+//        $this->weightedAvg = $this->weightedSum/count($this->available); //Does this have to be in string form?
+
 /// visible elements
+        $grading_choices = array(
+            self::SUM_SELECTION => get_string('sum', 'grades'),
+            self::AVG_SELECTION => get_string('avg', 'grades'),
+            self::SUM_WEIGHTED_SELECTION => get_string('sum_weighted', 'grades'),
+            self::AVG_WEIGHTED_SELECTION => get_string('avg_weighted', 'grades')
+        );
+
+        $this->gc = $grading_choices;
+
+        $mform->addElement('select', 'options[mode]', get_string('CGF_preselect', 'grades'), $grading_choices);
+//        $mform->addHelpButton('options[mode]', 'mode', 'grades');
+
         $mform->addElement('header', 'general', get_string('gradeitem', 'grades'));
         $mform->addElement('static', 'itemname', get_string('itemname', 'grades'));
+//        $mform->addElement('select', 'itemname', get_string('itemname', 'grades'));
         $mform->addElement('textarea', 'calculation', get_string('calculation', 'grades'), 'cols="60" rows="5"');
         $mform->addHelpButton('calculation', 'calculation', 'grades');
         $mform->setForceLtr('calculation');
@@ -74,6 +106,7 @@ class edit_calculation_form extends moodleform {
 
 /// add return tracking info
         $gpr = $this->_customdata['gpr'];
+
         $gpr->add_mform_elements($mform);
 
         $this->add_action_buttons();
@@ -83,6 +116,24 @@ class edit_calculation_form extends moodleform {
         global $CFG, $COURSE;
 
         $mform =& $this->_form;
+    }
+
+    public function prepare_grading(array $gc){
+        $this->gc = $gc;
+
+        if($this->gc['mode'] == self::SUM_SELECTION){
+            return $this->sum;
+        }
+        if($this->gc['mode'] == self::AVG_SELECTION){
+            return $this->avg;
+        }
+        if($this->gc['mode'] == self::SUM_WEIGHTED_SELECTION){
+            return $this->weightedSum;
+        }
+        if($this->gc['mode'] == self::AVG_WEIGHTED_SELECTION){
+            return $this->weightedAvg;
+        }
+        return 0;
     }
 
 /// perform extra validation before submission

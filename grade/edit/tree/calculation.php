@@ -31,6 +31,9 @@ $courseid  = required_param('courseid', PARAM_INT);
 $id        = required_param('id', PARAM_INT);
 $section   = optional_param('section', 'calculation', PARAM_ALPHA);
 $idnumbers = optional_param_array('idnumbers', null, PARAM_RAW);
+$grading_choices = optional_param_array('grading_choices', null, PARAM_INT);
+
+static $grading_choices = array(1,2,3,4);
 
 $url = new moodle_url('/grade/edit/tree/calculation.php', array('id'=>$id, 'courseid'=>$courseid));
 if ($section !== 'calculation') {
@@ -65,18 +68,42 @@ if ($grade_item->is_external_item() or ($grade_item->gradetype != GRADE_TYPE_VAL
 
 $mform = new edit_calculation_form(null, array('gpr'=>$gpr, 'itemid' => $grade_item->id));
 
+
 if ($mform->is_cancelled()) {
     redirect($returnurl);
 
 }
 
+
 $calculation = calc_formula::localize($grade_item->calculation);
 $calculation = grade_item::denormalize_formula($calculation, $grade_item->courseid);
-$mform->set_data(array('courseid'=>$grade_item->courseid, 'calculation'=>$calculation, 'id'=>$grade_item->id, 'itemname'=>$grade_item->itemname));
+$mform->set_data(array('courseid'=>$grade_item->courseid, 'calculation'=>$calculation, 'id'=>$grade_item->id, 'itemname'=>$grade_item->itemname, 'grading_choices'=>$grading_choices));
 
 $errors = array();
 
 if ($data = $mform->get_data()) {
+    echo $data->grading_choices;
+
+    if($_POST['grading_choices'] == edit_calculation_form::AVG_SELECTION){
+
+    }
+
+    if($mform->prepare_grading($data->grading_choices) == edit_calculation_form::AVG_SELECTION){
+        $mform['calculation'] = "calculation";
+    }
+    if($mform->prepare_grading($data->grading_choices) == edit_calculation_form::SUM_SELECTION){
+        $data->calculation ="iasuhdfiashfd";
+        $_REQUEST['calculation'] = $_GET['calculation'] = $_POST['calculation'] = '';
+    }
+    if($mform->prepare_grading($data->grading_choices) == edit_calculation_form::SUM_WEIGHTED_SELECTION){
+        $data->calculation ="iasuhdfiashfd";
+        $_REQUEST['calculation'] = $_GET['calculation'] = $_POST['calculation'] = '';
+    }
+    if($mform->prepare_grading($data->grading_choices) == edit_calculation_form::AVG_WEIGHTED_SELECTION){
+        $data->calculation ="iasuhdfiashfd";
+        $_REQUEST['calculation'] = $_GET['calculation'] = $_POST['calculation'] = '';
+    }
+
     $calculation = calc_formula::unlocalize($data->calculation);
     $grade_item->set_calculation($calculation);
 
