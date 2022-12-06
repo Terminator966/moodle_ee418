@@ -34,7 +34,7 @@ $idnumbers = optional_param_array('idnumbers', null, PARAM_RAW);
 $grading_choices = optional_param_array('grading_choices', null, PARAM_INT);
 
 static $grading_choices = array(1,2,3,4);
-
+//
 $url = new moodle_url('/grade/edit/tree/calculation.php', array('id'=>$id, 'courseid'=>$courseid));
 if ($section !== 'calculation') {
     $url->param('section', $section);

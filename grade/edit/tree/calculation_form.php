@@ -117,7 +117,7 @@ class edit_calculation_form extends moodleform {
 
         $mform =& $this->_form;
     }
-
+//
     public function prepare_grading(array $gc){
         $this->gc = $gc;
 
