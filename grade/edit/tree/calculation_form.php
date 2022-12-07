@@ -54,6 +54,9 @@ class edit_calculation_form extends moodleform {
         $sum = "";
         $wsum = "";
         $count = 0;
+
+
+
         // All items that have no idnumbers are added to a separate section of the form (hidden by default),
         // enabling the user to assign idnumbers to these grade_items.
         foreach ($this->available as $item) {
@@ -66,30 +69,29 @@ class edit_calculation_form extends moodleform {
             }
             //String of each option
 //
+
             if($count==0 && !empty($item->idnumber))
-                $sum = "[[".($item->idnumber)."]]".'+';
+                $sum = "[[".($item->idnumber)."]]".',';
             else if($count>0 && count($this->available) != $count){
-                $sum = $sum."[[".($item->idnumber)."]]".'+';
+                $sum = $sum."[[".($item->idnumber)."]]".',';
             }
             else if($count>0 && count($this->available) == $count){
                 $sum = $sum."[[".($item->idnumber)."]]";
             }
 
-            if($count==0 && !empty($item->idnumber))
-                $wsum = "("."[[".($item->idnumber)."]]"."*".floatval($weight).")".'+';
-            else if($count>0 && count($this->available) != $count){
-                $wsum = $wsum."("."[[".($item->idnumber)."]]"."*".floatval($weight).")".'+';
-            }
-            else if($count>0 && count($this->available) == $count){
-                $wsum = $wsum."("."[[".($item->idnumber)."]]"."*".floatval($weight).")";
+            if ($count == 0 && !empty($item->idnumber))
+                $wsum = "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")" . ',';
+            else if ($count > 0 && count($this->available) != $count) {
+                $wsum = $wsum . "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")" . ',';
+            } else if ($count > 0 && count($this->available) == $count) {
+                $wsum = $wsum . "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")";
             }
 
             $count+=1;
-
         }
-        $finalSum = "="."(".$sum.")";
+        $finalSum = "="."sum(".$sum.")";
         $finalAvg = $finalSum."/".(count($this->available));
-        $finalWsum = "="."(".$wsum.")";
+        $finalWsum = "="."sum(".$wsum.")";
         $finalWavg =  $finalWsum."/".(count($this->available));
 
 /// visible elements
