@@ -69,30 +69,38 @@ class edit_calculation_form extends moodleform {
             }
             //String of each option
 //
-
             if($count==0 && !empty($item->idnumber))
-                $sum = "[[".($item->idnumber)."]]".',';
-            else if($count>0 && count($this->available) != $count){
-                $sum = $sum."[[".($item->idnumber)."]]".',';
+                $sum = "[[".($item->idnumber)."]]";
+            else if($count>0 && count($this->available) != $count && !empty($item->idnumber)){
+                if(empty($sum)) {
+                    $sum = $sum."[[".($item->idnumber)."]]";
+                } else {
+                    $sum = $sum.","."[[".($item->idnumber)."]]";
+                }
             }
-            else if($count>0 && count($this->available) == $count){
-                $sum = $sum."[[".($item->idnumber)."]]";
+            else if($count>0 && count($this->available) == $count && !empty($item->idnumber)){
+                $sum = $sum.","."[[".($item->idnumber)."]]";
             }
 
             if ($count == 0 && !empty($item->idnumber))
-                $wsum = "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")" . ',';
-            else if ($count > 0 && count($this->available) != $count) {
-                $wsum = $wsum . "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")" . ',';
-            } else if ($count > 0 && count($this->available) == $count) {
-                $wsum = $wsum . "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")";
+                $wsum = "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")";
+            else if ($count > 0 && count($this->available) != $count && !empty($item->idnumber)) {
+                if(empty($wsum)) {
+                    $wsum = $wsum . "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")";
+                } else {
+                    $wsum = $wsum . ',' . "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")";
+                }
+
+            } else if ($count > 0 && count($this->available) == $count && !empty($item->idnumber)) {
+                $wsum = $wsum . ',' . "(" . "[[" . ($item->idnumber) . "]]" . "*" . $weight . ")";
             }
 
             $count+=1;
         }
-        $finalSum = "="."sum(".$sum.")";
-        $finalAvg = $finalSum."/".(count($this->available));
-        $finalWsum = "="."sum(".$wsum.")";
-        $finalWavg =  $finalWsum."/".(count($this->available));
+        $finalSum = "=sum(".$sum.")";
+        $finalAvg = "=average(".$sum.")";
+        $finalWsum = "=sum(".$wsum.")";
+        $finalWavg = "=average(".$wsum.")";
 
 /// visible elements
         $grading_choices = array(

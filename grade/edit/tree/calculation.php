@@ -97,18 +97,12 @@ if ($data = $mform->get_data()) {
                 }
             } else {
                 $itemName = strtolower($gi->get_name());
-//                if($itemName == "category total") {
-//                    $cm = null;
-//                    continue;
-//                }
                 $splitItemName = explode(' ', $itemName);
                 $finalItemName = implode('_', $splitItemName);
                 if (!grade_verify_idnumber($value, $COURSE->id, $gi, $finalItemName)) {
                     $cm = null;
-                    $errors[$giid] = "Hello There";
                     continue;
                 } else {
-                    $errors[$giid] = "I'm in the box";
                     $cm = $finalItemName;
                 }
             }
