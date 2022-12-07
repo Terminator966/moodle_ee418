@@ -17,7 +17,7 @@
 /**
  * CLI Bulk course registration script from a comma separated file.
  *
- * @package    tool_uploadcourse
+ * @package    tool_bulkenrollment
  * @copyright  2012 Piers Harding
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -85,7 +85,7 @@ Options:
 
 
 Example:
-\$sudo -u www-data /usr/bin/php admin/tool/uploadcourse/cli/uploadcourse.php --mode=createnew \\
+\$sudo -u www-data /usr/bin/php admin/tool/bulkenrollment/cli/bulkenrollment.php --mode=createnew \\
        --updatemode=dataonly --file=./courses.csv --delimiter=comma
 ";
 
@@ -105,13 +105,13 @@ $processoroptions = array(
 
 // Confirm that the mode is valid.
 $modes = array(
-    'createnew' => tool_uploadcourse_processor::MODE_CREATE_NEW,
-    'createall' => tool_uploadcourse_processor::MODE_CREATE_ALL,
-    'createorupdate' => tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE,
-    'update' => tool_uploadcourse_processor::MODE_UPDATE_ONLY
+    'createnew' => tool_bulkenrollment_processor::MODE_CREATE_NEW,
+    'createall' => tool_bulkenrollment_processor::MODE_CREATE_ALL,
+    'createorupdate' => tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE,
+    'update' => tool_bulkenrollment_processor::MODE_UPDATE_ONLY
 );
 if (!isset($options['mode']) || !isset($modes[$options['mode']])) {
-    echo get_string('invalidmode', 'tool_uploadcourse')."\n";
+    echo get_string('invalidmode', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -119,15 +119,15 @@ $processoroptions['mode'] = $modes[$options['mode']];
 
 // Check that the update mode is valid.
 $updatemodes = array(
-    'nothing' => tool_uploadcourse_processor::UPDATE_NOTHING,
-    'dataonly' => tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_ONLY,
-    'dataordefaults' => tool_uploadcourse_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS,
-    'missingonly' => tool_uploadcourse_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS
+    'nothing' => tool_bulkenrollment_processor::UPDATE_NOTHING,
+    'dataonly' => tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_ONLY,
+    'dataordefaults' => tool_bulkenrollment_processor::UPDATE_ALL_WITH_DATA_OR_DEFAUTLS,
+    'missingonly' => tool_bulkenrollment_processor::UPDATE_MISSING_WITH_DATA_OR_DEFAUTLS
 );
-if (($processoroptions['mode'] === tool_uploadcourse_processor::MODE_CREATE_OR_UPDATE ||
-        $processoroptions['mode'] === tool_uploadcourse_processor::MODE_UPDATE_ONLY)
+if (($processoroptions['mode'] === tool_bulkenrollment_processor::MODE_CREATE_OR_UPDATE ||
+        $processoroptions['mode'] === tool_bulkenrollment_processor::MODE_UPDATE_ONLY)
         && (!isset($options['updatemode']) || !isset($updatemodes[$options['updatemode']]))) {
-    echo get_string('invalideupdatemode', 'tool_uploadcourse')."\n";
+    echo get_string('invalideupdatemode', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -138,7 +138,7 @@ if (!empty($options['file'])) {
     $options['file'] = realpath($options['file']);
 }
 if (!file_exists($options['file'])) {
-    echo get_string('invalidcsvfile', 'tool_uploadcourse')."\n";
+    echo get_string('invalidcsvfile', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -146,7 +146,7 @@ if (!file_exists($options['file'])) {
 // Encoding.
 $encodings = core_text::get_encodings();
 if (!isset($encodings[$options['encoding']])) {
-    echo get_string('invalidencoding', 'tool_uploadcourse')."\n";
+    echo get_string('invalidencoding', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -177,7 +177,7 @@ if ($options['restorefile']) {
     $options['restorefile'] = realpath($options['restorefile']);
 }
 if ($options['restorefile'] && !file_exists($options['restorefile'])) {
-    echo get_string('invalidrestorefile', 'tool_uploadcourse')."\n";
+    echo get_string('invalidrestorefile', 'tool_bulkenrollment')."\n";
     echo $help;
     die();
 }
@@ -188,14 +188,14 @@ cron_setup_user();
 
 // Let's get started!
 $content = file_get_contents($options['file']);
-$importid = csv_import_reader::get_new_iid('uploadcourse');
-$cir = new csv_import_reader($importid, 'uploadcourse');
+$importid = csv_import_reader::get_new_iid('bulkenrollment');
+$cir = new csv_import_reader($importid, 'bulkenrollment');
 $readcount = $cir->load_csv_content($content, $options['encoding'], $options['delimiter']);
 unset($content);
 if ($readcount === false) {
-    throw new \moodle_exception('csvfileerror', 'tool_uploadcourse', '', $cir->get_error());
+    throw new \moodle_exception('csvfileerror', 'tool_bulkenrollment', '', $cir->get_error());
 } else if ($readcount == 0) {
     throw new \moodle_exception('csvemptyfile', 'error', '', $cir->get_error());
 }
-$processor = new tool_uploadcourse_processor($cir, $processoroptions, $defaults);
-$processor->execute(new tool_uploadcourse_tracker(tool_uploadcourse_tracker::OUTPUT_PLAIN));
+$processor = new tool_bulkenrollment_processor($cir, $processoroptions, $defaults);
+$processor->execute(new tool_bulkenrollment_tracker(tool_bulkenrollment_tracker::OUTPUT_PLAIN));
