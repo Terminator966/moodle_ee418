@@ -50,9 +50,10 @@ class edit_calculation_form extends moodleform {
 //        $this->grading_choices = $grading_choices;
         $this->grading_choice = grade_item::fetch_all(array('selection'=>$grading_choices));
         $this->noidnumbers = array();
-        $this->sum = 0;
-        $this->weight = 1;
-
+        $weight = 1.0;
+        $sum = "";
+        $wsum = "";
+        $count = 0;
         // All items that have no idnumbers are added to a separate section of the form (hidden by default),
         // enabling the user to assign idnumbers to these grade_items.
         foreach ($this->available as $item) {
@@ -63,28 +64,49 @@ class edit_calculation_form extends moodleform {
             if ($item->id == $itemid) { // Do not include the current grade_item in the available section
                 unset($this->available[$item->id]);
             }
+            //String of each option
 //
-//            $sum += $item;
-//            $weightedSum += ($weightedSum*$item);
-        }
+            if($count==0 && !empty($item->idnumber))
+                $sum = "[[".($item->idnumber)."]]".'+';
+            else if($count>0 && count($this->available) != $count){
+                $sum = $sum."[[".($item->idnumber)."]]".'+';
+            }
+            else if($count>0 && count($this->available) == $count){
+                $sum = $sum."[[".($item->idnumber)."]]";
+            }
 
-        $this->sum = "sum";
-        $this->weightedSum = "avg";
-//        $this->avg = $this->sum/count($this->available);
-//        $this->weightedAvg = $this->weightedSum/count($this->available); //Does this have to be in string form?
+            if($count==0 && !empty($item->idnumber))
+                $wsum = "("."[[".($item->idnumber)."]]"."*".floatval($weight).")".'+';
+            else if($count>0 && count($this->available) != $count){
+                $wsum = $wsum."("."[[".($item->idnumber)."]]"."*".floatval($weight).")".'+';
+            }
+            else if($count>0 && count($this->available) == $count){
+                $wsum = $wsum."("."[[".($item->idnumber)."]]"."*".floatval($weight).")";
+            }
+
+            $count+=1;
+
+        }
+        $finalSum = "="."(".$sum.")";
+        $finalAvg = $finalSum."/".(count($this->available));
+        $finalWsum = "="."(".$wsum.")";
+        $finalWavg =  $finalWsum."/".(count($this->available));
 
 /// visible elements
         $grading_choices = array(
-            self::SUM_SELECTION => get_string('sum', 'grades'),
-            self::AVG_SELECTION => get_string('avg', 'grades'),
-            self::SUM_WEIGHTED_SELECTION => get_string('sum_weighted', 'grades'),
-            self::AVG_WEIGHTED_SELECTION => get_string('avg_weighted', 'grades')
+            $finalSum => get_string('sum', 'grades'),
+            $finalAvg => get_string('avg', 'grades'),
+            $finalWsum => get_string('sum_weighted', 'grades'),
+            $finalWavg => get_string('avg_weighted', 'grades')
         );
 
         $this->gc = $grading_choices;
+//        $newString = "document.getElementById('id_calculation').value = this.value";
 
-        $mform->addElement('select', 'options[mode]', get_string('CGF_preselect', 'grades'), $grading_choices);
-//        $mform->addHelpButton('options[mode]', 'mode', 'grades');
+        $mform->addElement('select', 'options[mode]', get_string('CGF_preselect', 'grades'), $grading_choices,
+            "onchange='document.getElementById(`id_calculation`).value = this.value'");
+
+        //        $mform->addHelpButton('options[mode]', 'mode', 'grades');
 
         $mform->addElement('header', 'general', get_string('gradeitem', 'grades'));
         $mform->addElement('static', 'itemname', get_string('itemname', 'grades'));
