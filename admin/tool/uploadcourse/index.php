@@ -35,7 +35,7 @@ $returnurl = new moodle_url('/admin/tool/uploadcourse/index.php');
 
 if (empty($importid)) {
     $mform1 = new tool_uploadcourse_step1_form();
-    if ($form1data = $mform1->get_data()) {
+    if ($form1data = $mform1->get_data())
         $importid = csv_import_reader::get_new_iid('uploadcourse');
         $cir = new csv_import_reader($importid, 'uploadcourse');
         $content = $mform1->get_file_content('coursefile');

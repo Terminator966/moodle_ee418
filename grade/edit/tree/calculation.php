@@ -32,6 +32,7 @@ $id        = required_param('id', PARAM_INT);
 $section   = optional_param('section', 'calculation', PARAM_ALPHA);
 $idnumbers = optional_param_array('idnumbers', null, PARAM_RAW);
 
+//
 $url = new moodle_url('/grade/edit/tree/calculation.php', array('id'=>$id, 'courseid'=>$courseid));
 if ($section !== 'calculation') {
     $url->param('section', $section);
@@ -65,18 +66,21 @@ if ($grade_item->is_external_item() or ($grade_item->gradetype != GRADE_TYPE_VAL
 
 $mform = new edit_calculation_form(null, array('gpr'=>$gpr, 'itemid' => $grade_item->id));
 
+
 if ($mform->is_cancelled()) {
     redirect($returnurl);
 
 }
+
 
 $calculation = calc_formula::localize($grade_item->calculation);
 $calculation = grade_item::denormalize_formula($calculation, $grade_item->courseid);
 $mform->set_data(array('courseid'=>$grade_item->courseid, 'calculation'=>$calculation, 'id'=>$grade_item->id, 'itemname'=>$grade_item->itemname));
 
 $errors = array();
-
+//
 if ($data = $mform->get_data()) {
+
     $calculation = calc_formula::unlocalize($data->calculation);
     $grade_item->set_calculation($calculation);
 
@@ -88,8 +92,19 @@ if ($data = $mform->get_data()) {
         if ($gi = grade_item::fetch(array('id' => $giid))) {
             if ($gi->itemtype == 'mod') {
                 $cm = get_coursemodule_from_instance($gi->itemmodule, $gi->iteminstance, $gi->courseid);
+                if ($cm == null) {
+                    $errors[$giid] = "Hello";
+                }
             } else {
-                $cm = null;
+                $itemName = strtolower($gi->get_name());
+                $splitItemName = explode(' ', $itemName);
+                $finalItemName = implode('_', $splitItemName);
+                if (!grade_verify_idnumber($value, $COURSE->id, $gi, $finalItemName)) {
+                    $cm = null;
+                    continue;
+                } else {
+                    $cm = $finalItemName;
+                }
             }
 
             if (!grade_verify_idnumber($value, $COURSE->id, $gi, $cm)) {
@@ -181,14 +196,22 @@ function get_grade_tree(&$gtree, $element, $current_itemid=null, $errors=null) {
             if ($idnumber) {
                 $name .= ": [[$idnumber]]";
             } else {
-                $closingdiv = '';
-                if (!empty($errors[$grade_item->id])) {
-                    $name .= '<div class="error"><span class="error">' . $errors[$grade_item->id].'</span><br />'."\n";
-                    $closingdiv = "</div>\n";
+                $itemName = strtolower($grade_item->get_name());
+                $splitItemName = explode(' ', $itemName);
+                $finalItemName = implode('_', $splitItemName);
+                if ($itemName == "category total" OR $itemName == "course total") {
+                    $closingdiv = '';
+                    if (!empty($errors[$grade_item->id])) {
+                        $name .= '<div class="error"><span class="error">' . $errors[$grade_item->id].'</span><br />'."\n";
+                        $closingdiv = "</div>\n";
+                    }
+                    $name .= '<label class="accesshide" for="id_idnumber_' . $grade_item->id . '">' . get_string('gradeitems', 'grades')  .'</label>';
+                    $name .= '<input class="idnumber" id="id_idnumber_'.$grade_item->id.'" type="text" name="idnumbers['.$grade_item->id.']" />' . "\n";
+                    $name .= $closingdiv;
+                } else {
+                    $grade_item -> add_idnumber($finalItemName);
+                    $name .= ": [[$finalItemName]]";
                 }
-                $name .= '<label class="accesshide" for="id_idnumber_' . $grade_item->id . '">' . get_string('gradeitems', 'grades')  .'</label>';
-                $name .= '<input class="idnumber" id="id_idnumber_'.$grade_item->id.'" type="text" name="idnumbers['.$grade_item->id.']" />' . "\n";
-                $name .= $closingdiv;
             }
         } else {
             $name = "<strong>$name</strong>";
