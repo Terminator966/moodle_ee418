@@ -1,0 +1,3 @@
+ariaeventlistpagelimit,block_upcoming_events2
+ariaeventlistpaginationnavdates,block_upcoming_events2
+ariaeventlistpaginationnavcourses,block_upcoming_events2
