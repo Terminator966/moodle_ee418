@@ -102,7 +102,7 @@ class tool_bulkenrollment_processor {
 
             $data = $this->parse_line($line); //array that contains csv data
             $enrollment = $this->get_enrollment($data); //array to enrol object
-            if ($enrollment->prepare(options)) { //prepare make it possiable to view, procesed does enrollment
+            if ($enrollment->prepare($this->options)) { //prepare make it possiable to view, procesed does enrollment
                 $enrollment->proceed();
 
                 $status = $enrollment->get_statuses();
